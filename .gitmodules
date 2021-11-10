@@ -1,0 +1,3 @@
+[submodule "ucd"]
+	path = ucd
+	url = https://github.com/open-i18n/data-unicode-ucd
