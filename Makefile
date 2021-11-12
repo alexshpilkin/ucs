@@ -1,9 +1,7 @@
 AWK = awk
 CPPFLAGS = -std=c89 -Wall -pedantic -U_FORTIFY_SOURCE
 CFLAGS   = -fno-asynchronous-unwind-tables -fno-ident -fomit-frame-pointer \
-           -fno-stack-protector -Os -march=x86-64-v2 \
-           -fsanitize=address,undefined
-LDFLAGS  = -fsanitize=address,undefined
+           -fno-stack-protector -O2
 
 all clean test: ;
 maintainer-clean: clean ;

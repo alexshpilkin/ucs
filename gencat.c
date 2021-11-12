@@ -77,38 +77,19 @@ enum {
 	Sm = SYMMTH, Sc = SYMCUR, Sk = SYMMOD, So = SYMOTH,
 	Zs = SEPSPC, Zl = SEPLIN, Zp = SEPPAR
 };
-struct wordref {
-#ifdef __GNUC__
-	__extension__ /* FIXME C89 only permits unsigned int or int */
-#endif
-	uint_least16_t pop : 9, idx : 7;
-};
 #include "gencat.g"
 
 #if has_gnu_attribute(const)
 __attribute__((__const__))
 #endif
 gencat_t gencat(uint_least32_t uc) {
-	const unsigned i = uc >> (CHUNK_BIT + 5),
-	               j = (uc >> CHUNK_BIT) & (1 << 5) - 1,
-	               k = (uc & (1 << CHUNK_BIT) - 1) >> 5,
-	               l = uc & (1 << 5) - 1;
-	if unlikely(i >= sizeof uc_gc1 / sizeof uc_gc1[0]) {
+	const unsigned g = uc >> GROUP_BIT;
+	if unlikely(g >= sizeof uc_gcg / sizeof uc_gcg[0]) {
 		return OTHUNA;
 	} else {
-		const struct wordref *const ar = &uc_gc1[i];
-		const unsigned ai = ar[0].idx, ap = ar[0].pop, aq = ar[1].pop;
-		const uint_least32_t aw = uc_gcw[uc_gci[aq-ap] + ai];
-		const unsigned an = ap + __builtin_popcount(aw >> 31-j) - 1;
-
-		const unsigned m = uc_gc2[an].off;
-
-		const struct wordref *const br = &uc_gc2[an].dat[k];
-		const unsigned bi = br[0].idx, bp = br[0].pop, bq = br[1].pop;
-		const uint_least32_t bw = uc_gcw[uc_gci[bq-bp] + bi];
-		const unsigned bn = bp + __builtin_popcount(bw >> 31-l) - 1;
-
-		return uc_gcv[m+bn];
+		const unsigned c = (uc & (1 << GROUP_BIT) - 1) >> CHUNK_BIT,
+		               v =  uc & (1 << CHUNK_BIT) - 1;
+		return uc_gcv[uc_gcc[uc_gcg[g]][c] + v];
 	}
 }
 
