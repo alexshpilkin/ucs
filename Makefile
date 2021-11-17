@@ -15,8 +15,9 @@ gencat: gencat.o
 	$(CC) $(LDFLAGS) -o $@ gencat.o $(LOADLIBES) $(LDLIBS)
 gencat.o: gencat.g
 
-gencat.g: ucdssv.awk gencat.awk ucd/data/UnicodeData.txt
-	> $@ $(AWK) -f ucdssv.awk -f gencat.awk ucd/data/UnicodeData.txt
+gencat.g: ucdssv.awk tables.awk gencat.awk ucd/data/UnicodeData.txt
+	> $@ $(AWK) -f ucdssv.awk -f tables.awk -f gencat.awk \
+	ucd/data/UnicodeData.txt
 
 test: test-gencat
 maintainer-clean: maintainer-clean-test-gencat
