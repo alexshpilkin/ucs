@@ -6,7 +6,7 @@ END {
 	n += GROUP - n % GROUP - 1 # round up to multiple of GROUP
 
 	for (i = 0; i <= n; i += CHUNK) {
-		data = ""
+		data = ","
 		for (j = i; j < i + CHUNK; j++)
 			data = data (value[j] ? value[j] : value[""]) ","
 		if (!(chunki[i] = chunks[data]))
@@ -20,34 +20,38 @@ END {
 			if (i == j) continue
 			if (overlap[i,j] == "") {
 				l = chunkv[i]; r = chunkv[j]
-				for (k = 1; k <= length(l)+1; k++) {
+				for (k = 1; k <= length(l); k++) {
 					if (substr(l, k, length(r)) == \
 					    substr(r, 1, length(l)-k+1))
 					{ break }
 				}
-				overlap[i,j] = length(r) < length(l)-k+1 ? \
-				               length(r) : length(l)-k+1
+				l = substr(l, k, length(r))
+				overlap[i,j] = gsub(",", ",", l) - 1
+				ovstart[i,j] = k
 			}
 			if (max <  overlap[i,j] || \
 			    max == overlap[i,j] && left <  i || \
 			    max == overlap[i,j] && left == i && right < j)
-			{ max = overlap[left = i, right = j] }
+			{
+				left = i; right = j
+				max = overlap[i,j]; start = ovstart[i,j]
+			}
 		}
-		data = chunkv[left] substr(chunkv[right], max+1)
+		data = substr(chunkv[left], 1, start-1) chunkv[right]
 		if (!(super = chunks[data])) {
 			chunkv[super = chunks[data] = ++chunkc] = data; m++
 		}
 		parent[left] = parent[right] = super
-		l = substr(chunkv[left], 1, length(chunkv[left])-max)
+		l = substr(chunkv[left], 1, start-1)
 		offset[left] = 0; offset[right] = gsub(",", ",", l)
 		delete chunkv[left]; delete chunkv[right]
 	}
-	for (i in chunkv) i = i; # runs once
-	chunkc = split(chunkv[i], chunkv, ",") - 1
+	for (i in chunkv) i = i # runs once
+	chunkc = split(substr(chunkv[i], 2), chunkv, ",") - 1
 
 	printf "const uint_least%s_t uc_%sv[] = {", BITS, NAME
 	for (i = 1; i <= chunkc; i++) {
-		printf "%s%s,",
+		printf "%s%2s,",
 		       (i-1) % 10 ? " " : sprintf("\n\t/* %5u */ ", i-1),
 		       chunkv[i]
 	}
