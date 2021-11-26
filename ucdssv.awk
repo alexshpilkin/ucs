@@ -15,4 +15,4 @@ e = index($1, "..") { n0 = xtoi(substr($1, 1, e-1)) }
 !e && $2 ~ /^<.*, First>$/ { next }
 { if (nn < n) nn = n } END { n = nn }
 
-function set(a, x, i) { for (i = n0; i <= n; i++) a[i] = x }
+function set(a, x, i) { if (x == "") x = 1; for (i = n0; i <= n; i++) a[i] = x }

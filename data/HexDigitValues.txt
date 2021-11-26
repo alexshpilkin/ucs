@@ -1,0 +1,43 @@
+# This file is a supplement to the Unicode Character Database.
+#
+# It lists numeric values for hexadecimal digits, that is, characters with
+# Hex_Digit=Y, where those are not specified in the Unicode Character Database
+# proper. This covers digits with values 10 to 15 decimal, which are the small
+# and capital Latin letters A to F and their fullwidth equivalents.
+#
+# The values here are listed in the same way as in DerivedNumericValues.txt.
+# However, they should not be used together except when parsing a hexadecimal
+# numeral, because in Roman numerals some of the same Latin letters have
+# different values.
+#
+# For more information, see the Unicode FAQ entry on hexadecimals,
+# at https://unicode.org/faq/casemap_charprop.html#19
+#
+# This file is valid for Unicode versions 2.0.0 through 12.0.0.
+
+0041; 10.0; ; 10 # LATIN CAPITAL LETTER A
+0042; 11.0; ; 11 # LATIN CAPITAL LETTER B
+0043; 12.0; ; 12 # LATIN CAPITAL LETTER C
+0044; 13.0; ; 13 # LATIN CAPITAL LETTER D
+0045; 14.0; ; 14 # LATIN CAPITAL LETTER E
+0046; 15.0; ; 15 # LATIN CAPITAL LETTER F
+0061; 10.0; ; 10 # LATIN SMALL LETTER A
+0062; 11.0; ; 11 # LATIN SMALL LETTER B
+0063; 12.0; ; 12 # LATIN SMALL LETTER C
+0064; 13.0; ; 13 # LATIN SMALL LETTER D
+0065; 14.0; ; 14 # LATIN SMALL LETTER E
+0066; 15.0; ; 15 # LATIN SMALL LETTER F
+FF21; 10.0; ; 10 # FULLWIDTH LATIN CAPITAL LETTER A
+FF22; 11.0; ; 11 # FULLWIDTH LATIN CAPITAL LETTER B
+FF23; 12.0; ; 12 # FULLWIDTH LATIN CAPITAL LETTER C
+FF24; 13.0; ; 13 # FULLWIDTH LATIN CAPITAL LETTER D
+FF25; 14.0; ; 14 # FULLWIDTH LATIN CAPITAL LETTER E
+FF26; 15.0; ; 15 # FULLWIDTH LATIN CAPITAL LETTER F
+FF41; 10.0; ; 10 # FULLWIDTH LATIN SMALL LETTER A
+FF42; 11.0; ; 11 # FULLWIDTH LATIN SMALL LETTER B
+FF43; 12.0; ; 12 # FULLWIDTH LATIN SMALL LETTER C
+FF44; 13.0; ; 13 # FULLWIDTH LATIN SMALL LETTER D
+FF45; 14.0; ; 14 # FULLWIDTH LATIN SMALL LETTER E
+FF46; 15.0; ; 15 # FULLWIDTH LATIN SMALL LETTER F
+
+# EOF

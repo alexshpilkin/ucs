@@ -8,16 +8,21 @@ maintainer-clean: clean ;
 
 all: gencat
 clean: clean-gencat
-clean-gencat: ; rm -f gencat gencat.o
+clean-gencat: ; rm -f gencat uc_ty.o
 maintainer-clean: maintainer-clean-gencat
-maintainer-clean-gencat: ; rm -f gencat.g
-gencat: gencat.o
-	$(CC) $(LDFLAGS) -o $@ gencat.o $(LOADLIBES) $(LDLIBS)
-gencat.o: gencat.g
+maintainer-clean-gencat: ; rm -f uc_ty.g
+gencat: uc_ty.o
+	$(CC) $(LDFLAGS) -o $@ uc_ty.o $(LOADLIBES) $(LDLIBS)
+uc_ty.o: uc_ty.g
 
-gencat.g: ucdssv.awk tables.awk gencat.awk ucd/data/UnicodeData.txt
-	> $@ $(AWK) -f ucdssv.awk -f tables.awk -f gencat.awk \
-	ucd/data/UnicodeData.txt
+SOURCES_TY = ucd/data/extracted/DerivedGeneralCategory.txt \
+             ucd/data/DerivedCoreProperties.txt \
+             ucd/data/PropList.txt \
+             ucd/data/extracted/DerivedNumericValues.txt \
+             data/HexDigitValues.txt
+uc_ty.g: ucdssv.awk uc_ty.awk tables.awk $(SOURCES_TY)
+	> $@ $(AWK) -f ucdssv.awk -f uc_ty.awk -f tables.awk \
+	$(SOURCES_TY)
 
 test: test-gencat
 maintainer-clean: maintainer-clean-test-gencat

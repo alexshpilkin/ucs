@@ -27,22 +27,22 @@ END {
 				}
 				l = substr(l, k, length(r))
 				overlap[i,j] = gsub(",", ",", l) - 1
-				ovstart[i,j] = k
+				overidx[i,j] = k
 			}
 			if (max <  overlap[i,j] || \
 			    max == overlap[i,j] && left <  i || \
 			    max == overlap[i,j] && left == i && right < j)
 			{
 				left = i; right = j
-				max = overlap[i,j]; start = ovstart[i,j]
+				max = overlap[i,j]; idx = overidx[i,j]
 			}
 		}
-		data = substr(chunkv[left], 1, start-1) chunkv[right]
+		data = substr(chunkv[left], 1, idx-1) chunkv[right]
 		if (!(super = chunks[data])) {
 			chunkv[super = chunks[data] = ++chunkc] = data; m++
 		}
 		parent[left] = parent[right] = super
-		l = substr(chunkv[left], 1, start-1)
+		l = substr(chunkv[left], 1, idx-1)
 		offset[left] = 0; offset[right] = gsub(",", ",", l)
 		delete chunkv[left]; delete chunkv[right]
 	}
