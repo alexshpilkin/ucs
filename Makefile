@@ -20,8 +20,8 @@ SOURCES_TY = ucd/data/extracted/DerivedGeneralCategory.txt \
              ucd/data/PropList.txt \
              ucd/data/extracted/DerivedNumericValues.txt \
              data/HexDigitValues.txt
-uc_ty.g: ucdssv.awk uc_ty.awk tables.awk $(SOURCES_TY)
-	> $@ $(AWK) -f ucdssv.awk -f uc_ty.awk -f tables.awk \
+uc_ty.g: ucdssv.awk uc_ty.awk values.awk tables.awk $(SOURCES_TY)
+	> $@ $(AWK) -f ucdssv.awk -f uc_ty.awk -f values.awk -f tables.awk \
 	$(SOURCES_TY)
 
 test: test-gencat

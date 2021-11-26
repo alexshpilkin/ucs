@@ -49,7 +49,7 @@ END {
 	for (i in chunkv) i = i # runs once
 	chunkc = split(substr(chunkv[i], 2), chunkv, ",") - 1
 
-	printf "const uint_least%s_t uc_%sv[] = {", BITS, NAME
+	printf "const uint_least%s_t uc_%s1[] = {", BITS, NAME
 	for (i = 1; i <= chunkc; i++) {
 		printf "%s%2s,",
 		       (i-1) % 10 ? " " : sprintf("\n\t/* %5u */ ", i-1),
@@ -57,7 +57,7 @@ END {
 	}
 	printf "\n};\n"
 	octets += t = chunkc * BITS / 8
-	printf "sizeof uc_%sv\t= %u\n", NAME, t | "cat >&2"
+	printf "sizeof uc_%s1\t= %u\n", NAME, t | "cat >&2"
 
 	for (i = 0; i <= n; i += GROUP) {
 		data = ""
@@ -71,7 +71,7 @@ END {
 			groupv[groupi[i] = groups[data] = ++groupc] = data
 	}
 
-	printf "const uint_least16_t uc_%sc[][1 << GROUP_BIT - CHUNK_BIT] = {", NAME # FIXME
+	printf "const uint_least16_t uc_%s2[][1 << GROUP_BIT - CHUNK_BIT] = {", NAME # FIXME
 	for (i = 1; i <= groupc; i++) {
 		grpc = split(groupv[i], grpv, ",") - 1
 		printf "\n\t/* %u */ {", i-1
@@ -86,9 +86,9 @@ END {
 	}
 	printf "\n};\n"
 	octets += t = groupc * GROUP/CHUNK * 2
-	printf "sizeof uc_%sc\t= %u\n", NAME, t | "cat >&2"
+	printf "sizeof uc_%s2\t= %u\n", NAME, t | "cat >&2"
 
-	printf "const uint_least8_t uc_%sg[] = {", NAME
+	printf "const uint_least8_t uc_%s3[] = {", NAME
 	for (i = k = 0; i <= n; i += GROUP) {
 		printf "%s%2u,",
 		       k++ % 8 ? " " : sprintf("\n\t/* 0x%.6X */ ", i),
@@ -97,7 +97,7 @@ END {
 	}
 	printf "\n};\n"
 	octets += t = k
-	printf "sizeof uc_%sg\t= %u\n", NAME, t | "cat >&2"
+	printf "sizeof uc_%s3\t= %u\n", NAME, t | "cat >&2"
 
 	printf "// all uc_%s?\t= %u\n", NAME, octets | "cat >&2"
 }

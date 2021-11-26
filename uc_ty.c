@@ -145,12 +145,12 @@ enum {
 
 uc_const uint_least32_t uc_ty(uint_least32_t uc) {
 	const unsigned g = uc >> GROUP_BIT;
-	if unlikely(g >= sizeof uc_tyg / sizeof uc_tyg[0]) {
+	if unlikely(g >= sizeof uc_ty3 / sizeof uc_ty3[0]) {
 		return 0;
 	} else {
 		const unsigned c = (uc & (1 << GROUP_BIT) - 1) >> CHUNK_BIT,
 		               v =  uc & (1 << CHUNK_BIT) - 1;
-		return uc_tyv[uc_tyc[uc_tyg[g]][c] + v];
+		return uc_ty0[uc_ty1[uc_ty2[uc_ty3[g]][c] + v]];
 	}
 }
 
