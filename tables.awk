@@ -93,7 +93,7 @@ END {
 		printf "%s%2u,",
 		       k++ % 8 ? " " : sprintf("\n\t/* 0x%.6X */ ", i),
 		       x = groups[groupv[groupi[i]]] - 1
-		if (x - 1 > 255) exit 1
+		if (x > 255) exit 1
 	}
 	printf "\n};\n"
 	octets += t = k
