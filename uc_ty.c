@@ -38,6 +38,26 @@
 #else
 #define has_builtin(X) has_builtin_##X
 #define has_builtin_expect (__GNUC__ >= 3)
+#define has_builtin_popcount    (__GNUC__ * 100 + __GNUC_MINOR__ >= 304)
+#define has_builtin_popcountll  (__GNUC__ * 100 + __GNUC_MINOR__ >= 304)
+#endif
+
+#if _MSC_VER >= 1500 && defined __AVX__ && !defined _M_CEE_PURE
+/* compiler support is actually available since ABM, but no macro */
+#include <intrin.h>
+#if defined _M_X64 && !defined _M_ARM64EC
+#define has_popcnt64 1
+#define has_popcnt   1
+#define has_popcnt16 1
+#elif defined _M_IX86
+#define has_popcnt   1
+#define has_popcnt16 1
+#endif
+#endif
+
+#if _MSC_VER >= 1900 && defined _M_ARM64 && !defined _M_ARM64EC
+#include <arm64_neon.h>
+#define has_neon_cnt 1
 #endif
 
 #ifndef uc_const
@@ -56,6 +76,56 @@
 #else
 #define unlikely(E) (!!(E))
 #endif
+#endif
+
+#if has_builtin(popcount)
+#define UC_P32 __builtin_popcount
+#elif has_popcnt
+#define UC_P32 __popcnt
+#endif
+
+#if has_builtin(popcountll)
+#define UC_P64 __builtin_popcountll
+#elif has_popcnt64
+#define UC_P64 __popcnt64
+#elif has_neon_cnt
+#define UC_P64(M) (neon_addv8(neon_cnt(__uint64ToN64_v(M))).n8_i8[0])
+#elif defined UC_P32
+#define UC_P64(M) (UC_P32((M) >> 32) + UC_P32((M) & UINT32_C(0xFFFFFFFF)))
+#endif
+
+/* See, e.g., <http://graphics.stanford.edu/~seander/bithacks.html> */
+
+#if !defined UC_P32
+uc_const int uc_p32(uint_least32_t x) {
+	x -= (x >> 1) & UINT32_C(0x55555555);
+	x  = (x & UINT32_C(0x33333333)) + ((x >> 2) & UINT32_C(0x33333333));
+	x  = (x + (x >> 4)) & UINT32_C(0x0F0F0F0F);
+	return (x * UINT32_C(0x01010101)) >> 24;
+}
+#define UC_P32 uc_p32
+#endif
+
+#if !defined UC_P64 && defined UINT64_C
+uc_const int uc_p64(uint_least64_t x) {
+	x -= (x >> 1) & UINT64_C(0x5555555555555555);
+	x  = (x & UINT64_C(0x3333333333333333)) +
+	     ((x >> 2) & UINT64_C(0x3333333333333333));
+	x  = (x + (x >> 4)) & UINT64_C(0x0F0F0F0F0F0F0F0F);
+	return (x * UINT64_C(0x0101010101010101)) >> 56;
+}
+#define UC_P64 uc_p64
+#endif
+
+#ifdef UINT64_C
+typedef uint_least64_t uc_uint64_t;
+#define UC_UINT64_C(H, L) ((UINT64_C(H) << 32) | UINT64_C(L))
+#define UC_RANK64(M, B) UC_P64((M) >> (63-(B)))
+#else
+typedef uint_least32_t uc_uint64_t[2];
+#define UC_UINT64_C(H, L) { UINT32_C(H), UINT32_C(L) }
+#define UC_RANK64(M, B) (UC_P32((M)[(B) >> 5] >> (31-((B) & 31))) + \
+                         (UC_P32((M)[0]) & -((B) >> 5)))
 #endif
 
 typedef enum gencat {
@@ -151,8 +221,8 @@ uc_const uint_least32_t uc_ty(uint_least32_t uc) {
 		return 0;
 	} else {
 		unsigned p = uc_tyi[i], q, r;
-		q = uc_tyb[p] + __builtin_popcountll(uc_tym[p] >> (63-j)) - 1;
-		r = uc_tyb[q] + __builtin_popcountll(uc_tym[q] >> (63-k)) - 1;
+		q = uc_tyb[p] + UC_RANK64(uc_tym[p], j) - 1;
+		r = uc_tyb[q] + UC_RANK64(uc_tym[q], k) - 1;
 		return uc_tyv[uc_tyr[r]];
 	}
 }

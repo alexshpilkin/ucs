@@ -6,7 +6,7 @@ function mask(b, h, i, x) {
 		    substr(b, i+3, 1)
 		h = h sprintf("%X", x)
 	}
-	return "UINT64_C(0x"h")"
+	return "UC_UINT64_C(0x"substr(h, 1, 8)", 0x"substr(h, 9)")"
 }
 
 END {
@@ -66,10 +66,9 @@ END {
 	printf "sizeof uc_%sb\t= %u = %u + %u\n", NAME,
 	       t, k0 * 2, (k - k0) * 2 | "cat >&2"
 
-	printf "const uint_least%s_t uc_%sm[] = {", GROUP, NAME # FIXME 64-bit type?
+	printf "const uc_uint64_t uc_%sm[] = {", NAME
 	for (i = 1; i <= k; i++) {
-		printf "%s%s,",
-		       (i-1) % 2 ? " " : sprintf("\n\t/* %3u */ ", i-1),
+		printf "\n\t/* %3u */ %s,", i-1,
 		       maskv[i+k0 <= k ? i+k0 : i+k0-k]
 	}
 	printf "\n};\n"
