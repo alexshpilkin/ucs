@@ -144,13 +144,16 @@ enum {
 #include "uc_ty.g"
 
 uc_const uint_least32_t uc_ty(uint_least32_t uc) {
-	const unsigned g = uc >> GROUP_BIT;
-	if unlikely(g >= sizeof uc_ty3 / sizeof uc_ty3[0]) {
+	const unsigned i =  uc >> 12, /* FIXME */
+	               j = (uc >>  6) & 63,
+	               k =  uc        & 63;
+	if unlikely(i >= sizeof uc_tyi / sizeof uc_tyi[0]) {
 		return 0;
 	} else {
-		const unsigned c = (uc & (1 << GROUP_BIT) - 1) >> CHUNK_BIT,
-		               v =  uc & (1 << CHUNK_BIT) - 1;
-		return uc_ty0[uc_ty1[uc_ty2[uc_ty3[g]][c] + v]];
+		unsigned p = uc_tyi[i], q, r;
+		q = uc_tyb[p] + __builtin_popcountll(uc_tym[p] >> (63-j)) - 1;
+		r = uc_tyb[q] + __builtin_popcountll(uc_tym[q] >> (63-k)) - 1;
+		return uc_tyv[uc_tyr[r]];
 	}
 }
 

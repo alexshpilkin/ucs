@@ -1,4 +1,4 @@
-BEGIN { NAME = "ty"; BITS = 32; CHUNK_BIT = 5; GROUP_BIT = 10 }
+BEGIN { NAME = "ty"; BITS = 32 }
 
 $2 ~ /^[A-Z][a-z]$/ && $2 != "Cn"       { set(cat, $2) }
 $2 == "Alphabetic"                      { set(alnum) set(alpha) }
@@ -10,7 +10,7 @@ $2 == "Uppercase"                       { set(upper) }
 $2 == "Lowercase"                       { set(lower) }
 $2 == "White_Space"                     { set(space) }
 $2 == "Default_Ignorable_Code_Point"    { set(ignor) }
-$2 == "Noncharacter_Code_Point"         { set(nchar) }
+$2 == "Noncharacter_Code_Point"         { set(nchar) } # FIXME blows up the tables by 720 bytes
 $2 == "XID_Start"                       { set(start) }
 $2 == "XID_Continue"                    { set(ident) }
 $2 == "Pattern_White_Space"             { set(delim) }
