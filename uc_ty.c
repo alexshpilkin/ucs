@@ -33,7 +33,10 @@
 #endif
 #endif
 
-#if defined __has_builtin
+#if defined __has_builtin && defined __is_identifier
+#define has_builtin(X) (__has_builtin(__builtin_##X) || \
+                        !__is_identifier(__builtin_##X))
+#elif defined __has_builtin
 #define has_builtin(X) __has_builtin(__builtin_##X)
 #else
 #define has_builtin(X) has_builtin_##X
