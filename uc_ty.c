@@ -37,7 +37,7 @@
 #define has_builtin(X) __has_builtin(__builtin_##X)
 #else
 #define has_builtin(X) has_builtin_##X
-#define has_builtin_expect (__GNUC__ >= 3)
+#define has_builtin_expect      (__GNUC__ >= 3)
 #define has_builtin_popcount    (__GNUC__ * 100 + __GNUC_MINOR__ >= 304)
 #define has_builtin_popcountll  (__GNUC__ * 100 + __GNUC_MINOR__ >= 304)
 #endif
