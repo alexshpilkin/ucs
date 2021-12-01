@@ -1,11 +1,13 @@
-function mask(b, h, i, x) {
-	for (i = 1; i <= length(b); i += 4) {
-		x = substr(b, i,   1) * 8 + \
-		    substr(b, i+1, 1) * 4 + \
-		    substr(b, i+2, 1) * 2 + \
-		    substr(b, i+3, 1)
-		h = h sprintf("%X", x)
+BEGIN {
+	for (i = 0; i < 16; i++) {
+		nybble[int(i / 8) int(i % 8 / 4) int(i % 4 / 2) int(i % 2)] = \
+			sprintf("%X", i)
 	}
+}
+
+function mask(b, h, i) {
+	for (i = 1; i <= length(b); i += 4)
+		h = h nybble[substr(b, i, 4)]
 	return "UC_UINT64_C(0x"substr(h, 1, 8)", 0x"substr(h, 9)")"
 }
 
