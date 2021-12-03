@@ -1,8 +1,6 @@
 END {
-	for (i = 0; i <= n; i++) {
-		if ((s = value[i]) == "")
-			continue
-		if ((value[i] = values[s]) == "")
+	for (i = 0; i <= n; i++) if (i in value) {
+		if ((value[i] = values[s = value[i]]) == "")
 			valuev[value[i] = values[s] = ++valuec] = s
 	}
 	valuev[0] = value[""]; value[""] = 0

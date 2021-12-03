@@ -17,10 +17,13 @@ END {
 	printf "const uint_least%u_t uc_%sr[] = {", BITS, NAME
 	prev = "*" # not a C expression
 	for (i = k = 0; i <= n; i++) {
-		if (value[i] = ((x = value[i]) != prev)) {
-			printf "%s%2u,",
+		if ((x = i in value ? value[i] : value[""]) != prev) {
+			printf "%s%2s,",
 			       k++ % 10 ? " " : sprintf("\n\t/* %4u */ ", k-1),
 			       prev = x
+			value[i] = 1
+		} else if (i in value) {
+			delete value[i]
 		}
 	}
 	printf "\n};\n"
@@ -33,7 +36,7 @@ END {
 	for (i = 0; i <= n; i += GROUP) {
 		prev = b; b = 0; s = ""
 		for (j = i; j < i + GROUP; j++) {
-			s = s !!value[j]; b += !!value[j]
+			s = s (j in value); b += j in value
 		}
 		if (b || prev) {
 			value[i] = ++k
@@ -48,7 +51,7 @@ END {
 	for (i = 0; i <= n; i += GROUP*GROUP) {
 		prev = b; b = 0; s = ""
 		for (j = i; j < i + GROUP*GROUP; j += GROUP) {
-			s = s !!value[j]; b += !!value[j]
+			s = s (j in value); b += j in value
 		}
 		if (b || prev) {
 			value[i] = ++k
@@ -82,7 +85,7 @@ END {
 	for (i = k = 0; i <= n; i += GROUP*GROUP) {
 		printf "%s%3u,",
 		       k++ % 8 ? "" : sprintf("\n\t/* 0x%.6X */", i),
-		       value[i] ? (x = value[i] - k0 - 1) : x
+		       i in value ? (x = value[i] - k0 - 1) : x
 		if (x > 255) exit 1
 	}
 	printf "\n};\n"
