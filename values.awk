@@ -1,9 +1,40 @@
 END {
+	valuev[0] = value[""]
 	for (i = 0; i <= n; i++) if (i in value) {
-		if ((value[i] = values[s = value[i]]) == "")
-			valuev[value[i] = values[s] = ++valuec] = s
+		if (!((s = value[i]) in values))
+			valuev[values[s] = ++valuec] = s
+		if (i-3 in value && i-1 in value && value[i-3] == value[i-1] &&
+		    i-2 in value && value[i-2] == value[i] &&
+		    value[i-1] != value[i] &&
+		    !(value[i-1] in pair) && !(value[i] in pair))
+		{
+			pair[value[i-1]] = value[i]
+			pair[value[i]] = value[i-1]
+		}
 	}
-	valuev[0] = value[""]; value[""] = 0
+
+	for (i = 0; i <= valuec; i++)
+		delete values[valuev[i]]
+	for (i = k = 0; i <= valuec; i++) if (valuev[i] in pair) {
+		if (valuev[i] in values) continue
+		values[valuev[i]]       = k++
+		values[pair[valuev[i]]] = k++
+	}
+	for (i = 0; i <= valuec; i++) if (!(valuev[i] in pair))
+		values[valuev[i]] = k++
+	for (s in values)
+		valuev[values[s]] = s
+
+	value[""] = values[value[""]] * 2
+	for (i = 0; i <= n; i++) if (i in value) {
+		x = value[i] = values[s = value[i]] * 2
+		if (!(pair[s] && i-2 in value && i-1 in value)) continue
+		y = values[pair[s]] * 2
+		if (value[i-2] == x && value[i-1] == y)
+			value[i-2] = value[i-1] = i % 2 ? y + 1 : x + 1
+		if (  i % 2  && value[i-1] == y + 1) value[i] = y + 1
+		if (!(i % 2) && value[i-1] == x + 1) value[i] = x + 1
+	}
 
 	printf "const uint_least%s_t uc_%sv[] = {", BITS, NAME
 	for (i = 0; i <= valuec; i++)
@@ -12,5 +43,5 @@ END {
 	octets += t = (valuec + 1) * BITS / 8
 	printf "sizeof uc_%sv\t= %u\n", NAME, t | "cat >&2"
 
-	while (BITS > 8 && 2^BITS > valuec+1) BITS /= 2
+	for (BITS = 8; valuec * 2 + 1 >= 2^BITS; BITS *= 2) continue
 }

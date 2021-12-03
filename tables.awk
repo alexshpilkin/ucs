@@ -18,7 +18,7 @@ END {
 	prev = "*" # not a C expression
 	for (i = k = 0; i <= n; i++) {
 		if ((x = i in value ? value[i] : value[""]) != prev) {
-			printf "%s%2s,",
+			printf "%s%3s,",
 			       k++ % 10 ? " " : sprintf("\n\t/* %4u */ ", k-1),
 			       prev = x
 			value[i] = 1
