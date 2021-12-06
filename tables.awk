@@ -37,8 +37,9 @@ END {
 	}
 
 	for (i = prev = 0; i <= n; i += GROUP) {
-		m = ""; any = 0; s = i in value ? "" : last ","
-		for (j = i; j < i + GROUP; j++) {
+		m = "0"; any = i in value
+		s = (i in value ? last = value[i] : last) ","
+		for (j = i + 1; j < i + GROUP; j++) {
 			m = m (j in value); any = any || j in value
 			if (j in value) {
 				s = s (last = value[j]) ","; delete value[j]
@@ -59,15 +60,13 @@ END {
 	octets += t = k * BITS/8
 	printf "sizeof uc_%sr\t= %u\n", NAME, t | "cat >&2"
 
-	for (i = 0; i <= n; i += GROUP) if (i in value) {
-		value[i] = substr(masks[i], 1, 1) == "1" ? \
-		           masks[i] " "  value[i] : \
-		           masks[i] " " (value[i] + 1)
-	}
+	for (i = 0; i <= n; i += GROUP) if (i in value)
+		value[i] = masks[i] " " value[i]
 
 	for (i = prev = 0; i <= n; i += GROUP*GROUP) {
-		m = ""; any = 0; s = i in value ? "" : last ","
-		for (j = i; j < i + GROUP*GROUP; j += GROUP) {
+		m = "0"; any = i in value
+		s = (i in value ? last = value[i] : last) ","
+		for (j = i + GROUP; j < i + GROUP*GROUP; j += GROUP) {
 			m = m (j in value); any = any || j in value
 			if (j in value) {
 				s = s (last = value[j]) ","; delete value[j]
@@ -78,11 +77,8 @@ END {
 	}
 	k1 = split(pack(value), a1, ",") - 1
 
-	for (i = 0; i <= n; i += GROUP*GROUP) if (i in value) {
-		value[i] = substr(masks[i], 1, 1) == "1" ? \
-		           masks[i] " "  value[i]      "," : \
-		           masks[i] " " (value[i] + 1) ","
-	}
+	for (i = 0; i <= n; i += GROUP*GROUP) if (i in value)
+		value[i] = masks[i] " " value[i] ","
 	k2 = split(pack(value), a2, ",") - 1
 
 	for (i = 1; i <= k2; i++) {
