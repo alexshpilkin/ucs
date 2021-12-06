@@ -11,18 +11,74 @@ function mask(b, h, i) {
 	return "UC_UINT64_C(0x"substr(h, 1, 8)", 0x"substr(h, 9)")"
 }
 
-function pack(a, i, j, k, s, t) {
-	k = 0; s = ","
+function pack(a,
+              i, j, k, l, s, t,
+              rootc, rootv,
+              parent, offset, ostart,
+              left, right, other,
+              mergev, mergec, m)
+{
 	for (i = 0; i <= n; i++) if (i in a) {
-		t = a[i]; j = index(t, ",")
-		if (substr(s, length(s)-j) == "," substr(t, 1, j)) {
-			s = s substr(t, j+1); k--
-		} else {
-			s = s t
+		for (j = 1; j <= rootc; j++) {
+			if (k = index("," a[rootv[j]], "," a[i])) {
+				s = substr(a[rootv[j]], 1, k-1)
+				parent[i] = rootv[j]
+				offset[i] = gsub(",", ",", s)
+				break
+			} else if ((k = index("," a[i], "," a[rootv[j]])) &&
+			           a[i] != a[rootv[j]])
+			{
+				s = substr(a[i], 1, k-1)
+				parent[rootv[j]] = i
+				offset[rootv[j]] = gsub(",", ",", s)
+				for (k = j; k < rootc; k++) rootv[k] = rootv[k+1]
+				delete rootv[rootc]; rootc--; j--
+			}
 		}
-		a[i] = k; k += gsub(",", ",", t)
+		if (j > rootc) {
+			rootc++; rootv[rootc] = i; other[rootc] = rootc
+		}
 	}
-	return substr(s, 2)
+
+	for (i = 1; i <= rootc; i++) for (j = 1; j <= rootc; j++) {
+		if (i == j) continue
+		s = "," a[rootv[i]]; t = "," a[rootv[j]]
+		for (k = 1; k <= length(s); k++) {
+			if (substr(s, k) == substr(t, 1, length(s)-k+1)) break
+		}
+		ostart[i,j] = length(s)-k+1
+		t = substr(s, k); s = substr(s, 1, k-1)
+		offset[i,j] = gsub(",", ",", s)
+		k = gsub(",", ",", t) - 1 # overlap
+		mergev[k,++mergev[k]] = i; mergev[k,++mergev[k]] = j
+		if (mergec < k) mergec = k
+	}
+
+	for (i = mergec + 0; i >= 0; i--) {
+		for (j = 1; j <= mergev[i]; j += 2) {
+			if (mergev[i,j] in right || mergev[i,j+1] in left)
+				continue
+			if (other[mergev[i,j]] == mergev[i,j+1])
+				continue
+			right[mergev[i,j]] = mergev[i,j+1]
+			left[mergev[i,j+1]] = mergev[i,j]
+			# must handle singletons with other[I] == I
+			k = other[mergev[i,j]]; l = other[mergev[i,j+1]]
+			other[k] = l; other[l] = k
+		}
+	}
+
+	for (i in rootv) if (!(i in left)) break
+	s = a[rootv[i]]; k = offset[rootv[i]] = 0
+	for (; i in right; i = right[i]) {
+		offset[rootv[right[i]]] = k += offset[i,right[i]]
+		s = s substr(a[rootv[right[i]]], ostart[i,right[i]])
+	}
+	for (i in a) {
+		for (a[j = i] = 0; j != ""; j = parent[j])
+			a[i] += offset[j]
+	}
+	return s
 }
 
 END {
@@ -35,6 +91,7 @@ END {
 			delete value[i]
 		}
 	}
+	delete value[""]
 
 	for (i = prev = 0; i <= n; i += GROUP) {
 		m = "0"; any = i in value
