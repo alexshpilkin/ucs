@@ -1,5 +1,5 @@
 AWK = awk
-CPPFLAGS = -std=c89 -Wall -pedantic -U_FORTIFY_SOURCE
+CPPFLAGS = -std=c89 -Wall -Wimplicit-fallthrough -pedantic -U_FORTIFY_SOURCE
 CFLAGS   = -fno-asynchronous-unwind-tables -fno-ident -fomit-frame-pointer \
            -fno-stack-protector -O2
 
