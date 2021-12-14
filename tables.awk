@@ -83,6 +83,7 @@ function pack(a,
 
 END {
 	GROUP = 64; n += GROUP*GROUP - n % (GROUP*GROUP) - 1 # round up
+	for (i = 0; i < GROUP; i++) none = none "0"
 
 	for (i = 0; i <= n; i++) {
 		if ((x = i in value ? value[i] : value[""]) != prev) {
@@ -103,7 +104,7 @@ END {
 			}
 		}
 		if (any || prev) { value[i] = s; masks[i] = m }
-		prev = any
+		prev = m != none
 	}
 	k = split(pack(value), a, ",") - 1
 
@@ -130,7 +131,7 @@ END {
 			}
 		}
 		if (any || prev) { value[i] = s; masks[i] = m }
-		prev = any
+		prev = m != none
 	}
 	k1 = split(pack(value), a1, ",") - 1
 
