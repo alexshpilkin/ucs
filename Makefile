@@ -25,6 +25,20 @@ uc_ty.g: ucdssv.awk uc_ty.awk values.awk tables.awk $(SOURCES_TY)
 maintainer-clean: maintainer-clean-uc_ty
 maintainer-clean-uc_ty: ; rm -f uc_ty.g
 
+check: check-isualp
+check-isualp: check/isualp check/isualp.tsv
+	check/isualp | diff -u check/isualp.tsv -
+check/isualp: check/isualp.o uc_ty.o
+	$(CC) $(LDFLAGS) -o $@ check/isualp.o uc_ty.o $(LOADLIBES) $(LDLIBS)
+check/isualp.o: include/uctype.h
+clean: clean-check-isualp
+clean-check-isualp: ; rm -f check/isualp check/isualp.o
+
+check/isualp.tsv: ucdssv.awk check/isualp.awk ucd/data/DerivedCoreProperties.txt
+	> $@ $(AWK) -f ucdssv.awk -f check/isualp.awk ucd/data/DerivedCoreProperties.txt
+maintainer-clean: maintainer-clean-check-isualp
+maintainer-clean-check-isualp: ; rm -f check/isualp.tsv
+
 check: check-mincat
 check-mincat: check/mincat check/mincat.tsv
 	cut -f1 check/mincat.tsv | check/mincat | diff -u check/mincat.tsv -

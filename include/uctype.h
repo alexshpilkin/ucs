@@ -5,6 +5,8 @@
 #include <stddef.h>
 #include <stdint.h>
 
+#define UNIMAX UINT32_C(0x10FFFF)
+
 enum { MAJCAT = 007 };
 
 typedef enum majcat {
