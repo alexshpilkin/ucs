@@ -1,4 +1,4 @@
-*.[go]
+*.[goa]
 check/*.tsv
 check/isualp
 check/mincat

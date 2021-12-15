@@ -1,4 +1,5 @@
 AWK = awk
+ARFLAGS  = -cr
 CPPFLAGS = -std=c89 -Wall -Wimplicit-fallthrough -pedantic -U_FORTIFY_SOURCE
 CFLAGS   = -fno-asynchronous-unwind-tables -fno-ident -fomit-frame-pointer \
            -fno-stack-protector -O2
@@ -9,10 +10,14 @@ CFLAGS   = -fno-asynchronous-unwind-tables -fno-ident -fomit-frame-pointer \
 all clean check: ;
 maintainer-clean: clean ;
 
-all: uc_ty.o
+OBJECTS_UC = uc_ty.o
+all: libuc.a
+libuc.a: $(OBJECTS_UC)
+	$(AR) $(ARFLAGS) $@ $(OBJECTS_UC)
+	if [ "$(RANLIB)" ]; then ranlib $@; fi
 uc_ty.o: include/uctype.h uc_ty.g
-clean: clean-uc_ty
-clean-uc_ty: ; rm -f uc_ty.o
+clean: clean-libuc
+clean-libuc: ; rm -f libuc.a $(OBJECTS_UC)
 
 SOURCES_TY = ucd/data/extracted/DerivedGeneralCategory.txt \
              ucd/data/DerivedCoreProperties.txt \
@@ -28,8 +33,8 @@ maintainer-clean-uc_ty: ; rm -f uc_ty.g
 check: check-isualp
 check-isualp: check/isualp check/isualp.tsv
 	check/isualp | diff -u check/isualp.tsv -
-check/isualp: check/isualp.o uc_ty.o
-	$(CC) $(LDFLAGS) -o $@ check/isualp.o uc_ty.o $(LOADLIBES) $(LDLIBS)
+check/isualp: check/isualp.o libuc.a
+	$(CC) $(LDFLAGS) -o $@ check/isualp.o libuc.a $(LOADLIBES) $(LDLIBS)
 check/isualp.o: include/uctype.h
 clean: clean-check-isualp
 clean-check-isualp: ; rm -f check/isualp check/isualp.o
@@ -42,8 +47,8 @@ maintainer-clean-check-isualp: ; rm -f check/isualp.tsv
 check: check-mincat
 check-mincat: check/mincat check/mincat.tsv
 	cut -f1 check/mincat.tsv | check/mincat | diff -u check/mincat.tsv -
-check/mincat: check/mincat.o uc_ty.o
-	$(CC) $(LDFLAGS) -o $@ check/mincat.o uc_ty.o $(LOADLIBES) $(LDLIBS)
+check/mincat: check/mincat.o libuc.a
+	$(CC) $(LDFLAGS) -o $@ check/mincat.o libuc.a $(LOADLIBES) $(LDLIBS)
 check/mincat.o: include/uctype.h
 clean: clean-check-mincat
 clean-check-mincat: ; rm -f check/mincat check/mincat.o
