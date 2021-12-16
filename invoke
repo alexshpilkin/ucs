@@ -1,0 +1,19 @@
+while test $# -gt 0; do
+	case $1 in
+	-o) shift; o=$1;;
+	--) shift; break;;
+	-*) test $1 $2 ||
+	    { s=$?; test -f "$o" && exit;  } ||
+	    { echo "! $1 $2" >&2; exit $s; }
+	    shift;;
+	 *) break;;
+	esac
+	shift
+done
+
+if test $# -lt 1 || test -z "$o"; then
+	echo "usage: $0 -o OUTPUT [TEST ...] [--] COMMAND"
+	exit 64 # EX_USAGE
+fi
+
+"$@" > "$o" || { s=$?; rm "$o"; exit $s; }
