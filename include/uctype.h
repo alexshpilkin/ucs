@@ -1,9 +1,12 @@
 #ifndef UC_UCTYPE_H_
 #define UC_UCTYPE_H_ 1
 
+#ifndef UC_CNF_H_
+#include "uc_cnf.h"
+#endif
+
 #include <limits.h>
 #include <stddef.h>
-#include <stdint.h>
 
 #define UNIMAX UINT32_C(0x10FFFF)
 
@@ -26,7 +29,7 @@ typedef enum mincat {
 #define strfromcat uc_gcn /* use 6-character names */
 #define CAT_MAX 3
 
-int strfromcat(char *, size_t, mincat_t); /* FIXME inline */
+int strfromcat(char *uc_restrict, size_t, mincat_t); /* FIXME inline */
 
 #define UC_INT(V, M)  ((M) <= INT_MAX ? (int)((V) & (M)) : !!((V) & (M)))
 
@@ -83,6 +86,6 @@ int strfromcat(char *, size_t, mincat_t); /* FIXME inline */
 #define UC_XDIGIT     (UINT32_C(1) << 29)
 #define isuxdigit(U)  (UC_INT(uc_ty(U), UC_XDIGIT))
 
-uint_least32_t uc_ty(uint_least32_t); /* FIXME inline */
+uc_const uint_least32_t uc_ty(uint_least32_t); /* FIXME inline */
 
 #endif

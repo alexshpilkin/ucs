@@ -10,11 +10,12 @@ CFLAGS   = -fno-asynchronous-unwind-tables -fno-ident -fomit-frame-pointer \
 all clean check: ;
 maintainer-clean: clean ;
 
-OBJECTS_UC = uc_ty.o
+OBJECTS_UC = uc_p32.o uc_p64.o uc_ty.o
 all: libuc.a
 libuc.a: $(OBJECTS_UC)
 	$(AR) $(ARFLAGS) $@ $(OBJECTS_UC)
 	if [ "$(RANLIB)" ]; then ranlib $@; fi
+$(OBJECTS_UC): include/uc_cnf.h
 uc_ty.o: include/uctype.h uc_ty.g
 clean: clean-libuc
 clean-libuc: ; rm -f libuc.a $(OBJECTS_UC)
@@ -35,7 +36,7 @@ check-isualp: check/isualp check/isualp.tsv
 	check/isualp | diff -u check/isualp.tsv -
 check/isualp: check/isualp.o libuc.a
 	$(CC) $(LDFLAGS) -o $@ check/isualp.o libuc.a $(LOADLIBES) $(LDLIBS)
-check/isualp.o: include/uctype.h
+check/isualp.o: include/uc_cnf.h include/uctype.h
 clean: clean-check-isualp
 clean-check-isualp: ; rm -f check/isualp check/isualp.o
 
@@ -49,7 +50,7 @@ check-mincat: check/mincat check/mincat.tsv
 	cut -f1 check/mincat.tsv | check/mincat | diff -u check/mincat.tsv -
 check/mincat: check/mincat.o libuc.a
 	$(CC) $(LDFLAGS) -o $@ check/mincat.o libuc.a $(LOADLIBES) $(LDLIBS)
-check/mincat.o: include/uctype.h
+check/mincat.o: include/uc_cnf.h include/uctype.h
 clean: clean-check-mincat
 clean-check-mincat: ; rm -f check/mincat check/mincat.o
 
