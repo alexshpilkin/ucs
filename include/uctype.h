@@ -86,6 +86,12 @@ int strfromcat(char *uc_restrict, size_t, mincat_t); /* FIXME inline */
 #define UC_XDIGIT     (UINT32_C(1) << 29)
 #define isuxdigit(U)  (UC_INT(uc_ty(U), UC_XDIGIT))
 
+extern const uint_least32_t uc_tyv[];
+extern const uint_least8_t  uc_tyr[];
+extern const uint_least16_t uc_tyb[];
+extern const uc_uint64_t    uc_tym[];
+extern const uint_least8_t  uc_tyi[(UNIMAX + 1) / 64 / 64];
+
 uc_const uint_least32_t uc_ty(uint_least32_t); /* FIXME inline */
 
 #endif

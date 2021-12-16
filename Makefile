@@ -10,26 +10,27 @@ CFLAGS   = -fno-asynchronous-unwind-tables -fno-ident -fomit-frame-pointer \
 all clean check: ;
 maintainer-clean: clean ;
 
-OBJECTS_UC = uc_p32.o uc_p64.o uc_ty.o
+OBJECTS_UC = uc_gcn.o uc_p32.o uc_p64.o uc_ty.o uc_tym.o
 all: libuc.a
 libuc.a: $(OBJECTS_UC)
 	$(AR) $(ARFLAGS) $@ $(OBJECTS_UC)
 	if [ "$(RANLIB)" ]; then ranlib $@; fi
 $(OBJECTS_UC): include/uc_cnf.h
-uc_ty.o: include/uctype.h uc_ty.g
+uc_gcn.o uc_ty.o uc_tym.o: include/uctype.h
+uc_tym.o: uc_tym.g
 clean: clean-libuc
 clean-libuc: ; rm -f libuc.a $(OBJECTS_UC)
 
-SOURCES_TY = ucd/data/extracted/DerivedGeneralCategory.txt \
-             ucd/data/DerivedCoreProperties.txt \
-             ucd/data/PropList.txt \
-             ucd/data/extracted/DerivedNumericValues.txt \
-             data/HexDigitValues.txt
-uc_ty.g: ucdssv.awk uc_ty.awk values.awk tables.awk $(SOURCES_TY)
-	> $@ $(AWK) -f ucdssv.awk -f uc_ty.awk -f values.awk -f tables.awk \
-	$(SOURCES_TY)
-maintainer-clean: maintainer-clean-uc_ty
-maintainer-clean-uc_ty: ; rm -f uc_ty.g
+SOURCES_TYM = ucd/data/extracted/DerivedGeneralCategory.txt \
+              ucd/data/DerivedCoreProperties.txt \
+              ucd/data/PropList.txt \
+              ucd/data/extracted/DerivedNumericValues.txt \
+              data/HexDigitValues.txt
+uc_tym.g: ucdssv.awk uc_tym.awk values.awk tables.awk $(SOURCES_TYM)
+	> $@ $(AWK) -f ucdssv.awk -f uc_tym.awk -f values.awk -f tables.awk \
+	$(SOURCES_TYM)
+maintainer-clean: maintainer-clean-uc_tym
+maintainer-clean-uc_tym: ; rm -f uc_tym.g
 
 check: check-isualp
 check-isualp: check/isualp check/isualp.tsv
