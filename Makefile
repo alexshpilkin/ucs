@@ -47,7 +47,7 @@ maintainer-clean-uc_qcm: ; test -d ucd/data && rm -f uc_qcm.g
 
 check: check-isualp
 check-isualp: check/isualp check/isualp.tsv
-	check/isualp | diff -u check/isualp.tsv -
+	check/isualp | cmp check/isualp.tsv -
 check/isualp: check/isualp.o libuc.a
 	$(CC) $(LDFLAGS) -o $@ check/isualp.o libuc.a $(LOADLIBES) $(LDLIBS)
 check/isualp.o: include/uc_cnf.h include/uctype.h
@@ -64,7 +64,7 @@ maintainer-clean-check-isualp: ; test -d ucd/data && rm -f check/isualp.tsv
 
 check: check-mincat
 check-mincat: check/mincat check/mincat.tsv
-	cut -f1 check/mincat.tsv | check/mincat | diff -u check/mincat.tsv -
+	cut -f1 check/mincat.tsv | check/mincat | cmp check/mincat.tsv -
 check/mincat: check/mincat.o libuc.a
 	$(CC) $(LDFLAGS) -o $@ check/mincat.o libuc.a $(LOADLIBES) $(LDLIBS)
 check/mincat.o: include/uc_cnf.h include/uctype.h
