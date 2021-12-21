@@ -1,5 +1,5 @@
-$2 != "Cn" && $3 != "Cn" { set(cat, $3 ? $3 : $2) }
+$3 != "Cn" { set(cat, $3) }
 END {
-	for (i = 0; i <= n; i++)
-		printf "%.4X\t%s\n", i, i in cat ? cat[i] : "Cn"
+	for (i = 0; i <= n; i++) if (i in cat)
+		printf "%.4X\t%s\n", i, cat[i]
 }

@@ -5,11 +5,14 @@
 #include <stdlib.h>
 
 int main(int argc, char **argv) {
-	uint_least32_t uc; char buf[CAT_MAX];
-	while (scanf("%"SCNxLEAST32, &uc) == 1) {
-		if (strfromcat(buf, sizeof buf, mincat(uc)) >= sizeof buf)
+	uint_least32_t i;
+	for (i = 0; i < 2*(UNIMAX + 1); i++) {
+		char buf[CAT_MAX];
+		if (strfromcat(buf, sizeof buf, mincat(i)) >= sizeof buf)
 			abort();
-		printf("%.4"PRIXLEAST32"\t%s\n", uc, &buf[0]);
+		if (buf[0] == 'C' && buf[1] == 'n' && buf[2] == '\0')
+			continue;
+		printf("%.4"PRIXLEAST32"\t%s\n", i, &buf[0]);
 	}
-	return ferror(stdin) ? (perror(argv[0]), EXIT_FAILURE) : EXIT_SUCCESS;
+	return 0;
 }

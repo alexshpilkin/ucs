@@ -64,7 +64,7 @@ maintainer-clean-check-isualp: ; test -d ucd/data && rm -f check/isualp.tsv
 
 check: check-mincat
 check-mincat: check/mincat check/mincat.tsv
-	cut -f1 check/mincat.tsv | check/mincat | cmp check/mincat.tsv -
+	check/mincat | cmp check/mincat.tsv -
 check/mincat: check/mincat.o libuc.a
 	$(CC) $(LDFLAGS) -o $@ check/mincat.o libuc.a $(LOADLIBES) $(LDLIBS)
 check/mincat.o: include/uc_cnf.h include/uctype.h
