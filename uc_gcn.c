@@ -6,14 +6,15 @@
 /* FIXME keep in sync with mincat_t */
 
 int strfromcat(char *uc_restrict s, size_t n, mincat_t c) {
-	static const char name[PCTOTH+1] =
-		"n"  "u"  "n"  "d"  "c"  "m"  "s"  "\0"
-		"c"  "l"  "c"  "l"  "d"  "c"  "l"  "\0"
-		"f"  "t"  "e"  "o"  "s"  "k"  "p"  "\0"
-		"s"  "m"  "\0" "\0" "e"  "o"  "\0" "\0"
-		"o"  "o"  "\0" "\0" "i"  "C"  "L"  "M"
-		"N"  "P"  "S"  "Z"  "f"  "\0" "\0" "\0"
-		"\0" "\0" "\0" "\0" "o";
+	static const char name[PCTOTH+1] = {
+		'n', 'u', 'n', 'd', 'c', 'm', 's', '\0',
+		'c', 'l', 'c', 'l', 'd', 'c', 'l', '\0',
+		'f', 't', 'e', 'o', 's', 'k', 'p', '\0',
+		's', 'm', '\0','\0','e', 'o', '\0','\0',
+		'o', 'o', '\0','\0','i', 'C', 'L', 'M',
+		'N', 'P', 'S', 'Z', 'f', '\0','\0','\0',
+		'\0','\0','\0','\0','o',
+	};
 
 	switch (n) {
 	default: s[2] = '\0'; uc_fallthrough;

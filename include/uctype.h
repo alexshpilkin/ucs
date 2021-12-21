@@ -1,6 +1,10 @@
 #ifndef UC_UCTYPE_H_
 #define UC_UCTYPE_H_ 1
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef UC_CNF_H_
 #include "uc_cnf.h"
 #endif
@@ -118,5 +122,9 @@ extern const uc_uint64_t    uc_qcm[];
 extern const uint_least8_t  uc_qci[(UNIMAX + 1) / 64 / 64];
 
 uc_const uint_least32_t uc_qc(uint_least32_t); /* FIXME inline */
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

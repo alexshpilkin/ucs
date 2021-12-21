@@ -4,6 +4,10 @@
 #error "uc_cnf.h included multiple times"
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <stdint.h>
 
 #ifndef has_attribute
@@ -126,13 +130,13 @@
 
 /* See, e.g., <http://graphics.stanford.edu/~seander/bithacks.html> */
 
-#if !defined UC_P32
 uc_const int uc_p32(uint_least32_t); /* FIXME inline */
+#if !defined UC_P32
 #define UC_P32 uc_p32
 #endif
 
-#if !defined UC_P64 && defined UINT64_C
 uc_const int uc_p64(uint_least64_t); /* FIXME inline */
+#if !defined UC_P64 && defined UINT64_C
 #define UC_P64 uc_p64
 #endif
 
@@ -147,4 +151,8 @@ typedef uint_least32_t uc_uint64_t[2];
 #define UC_RANK64(M, B) (UC_P32((M)[(B) >> 5] >> (31-((B) & 31))) + \
                          (UC_P32((M)[0]) & -((B) >> 5)))
 #endif
+#endif
+
+#ifdef __cplusplus
+}
 #endif

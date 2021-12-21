@@ -12,7 +12,7 @@ int main(int argc, char **argv) {
 			abort();
 		if (buf[0] == 'C' && buf[1] == 'n' && buf[2] == '\0')
 			continue;
-		printf("%.4"PRIXLEAST32"\t%s\n", i, &buf[0]);
+		printf("%.4" PRIXLEAST32 "\t%s\n", i, &buf[0]);
 	}
 	return 0;
 }
