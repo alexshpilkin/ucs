@@ -10,7 +10,7 @@ CFLAGS   = -fno-asynchronous-unwind-tables -fno-ident -fomit-frame-pointer \
 all clean check: ;
 maintainer-clean: clean ;
 
-OBJECTS_UC = uc_gcn.o uc_p32.o uc_p64.o uc_ty.o uc_tym.o
+OBJECTS_UC = uc_gcn.o uc_p32.o uc_p64.o uc_ty.o uc_tym.o uc_qcm.o
 all: libuc.a
 libuc.a: $(OBJECTS_UC)
 	$(AR) $(ARFLAGS) $@ $(OBJECTS_UC)
@@ -18,6 +18,7 @@ libuc.a: $(OBJECTS_UC)
 $(OBJECTS_UC): include/uc_cnf.h
 uc_gcn.o uc_ty.o uc_tym.o: include/uctype.h
 uc_tym.o: uc_tym.g
+uc_qcm.o: uc_qcm.g
 clean: clean-libuc
 clean-libuc: ; rm -f libuc.a $(OBJECTS_UC)
 
@@ -33,6 +34,16 @@ uc_tym.g: invoke ucdssv.awk uc_tym.awk values.awk tables.awk $(SOURCES_TYM)
 $(SOURCES_TYM):
 maintainer-clean: maintainer-clean-uc_tym
 maintainer-clean-uc_tym: ; test -d ucd/data && rm -f uc_tym.g
+
+SOURCES_QCM = ucd/data/UnicodeData.txt \
+              ucd/data/extracted/DerivedCombiningClass.txt \
+              ucd/data/DerivedNormalizationProps.txt
+uc_qcm.g: invoke ucdssv.awk uc_qcm.awk values.awk tables.awk $(SOURCES_QCM)
+	$(SHELL) ./invoke -o $@ -d ucd/data -- \
+	$(AWK) -f ucdssv.awk -f uc_qcm.awk -f values.awk -f tables.awk \
+	$(SOURCES_QCM)
+maintainer-clean: maintainer-clean-uc_qcm
+maintainer-clean-uc_qcm: ; test -d ucd/data && rm -f uc_qcm.g
 
 check: check-isualp
 check-isualp: check/isualp check/isualp.tsv

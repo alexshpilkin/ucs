@@ -94,4 +94,29 @@ extern const uint_least8_t  uc_tyi[(UNIMAX + 1) / 64 / 64];
 
 uc_const uint_least32_t uc_ty(uint_least32_t); /* FIXME inline */
 
+/* FIXME not enum constants */
+
+#define UC_CMBCLS_SHIFT     0
+#define UC_CMBCLS   ((1 <<  8) - 1)
+#define UC_FCE       (1 <<  8)
+#define UC_DQN       (1 <<  9)
+#define UC_CQN       (1 << 10)
+#define UC_CQM       (3 << 10)
+#define UC_KDQN      (1 << 12)
+#define UC_KCQN      (1 << 13)
+#define UC_KCQM      (3 << 13)
+/* unused             1 << 15 */
+#define UC_LCC_SHIFT       16
+#define UC_TCC_SHIFT       24
+
+#define cmbcls(U) ((int)(uc_qc(U) & UC_CMBCLS))
+
+extern const uint_least32_t uc_qcv[];
+extern const uint_least8_t  uc_qcr[];
+extern const uint_least16_t uc_qcb[];
+extern const uc_uint64_t    uc_qcm[];
+extern const uint_least8_t  uc_qci[(UNIMAX + 1) / 64 / 64];
+
+uc_const uint_least32_t uc_qc(uint_least32_t); /* FIXME inline */
+
 #endif
