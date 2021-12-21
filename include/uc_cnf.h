@@ -121,7 +121,7 @@
 #elif has_neon_cnt
 #define UC_P64(M) (neon_addv8(neon_cnt(__uint64ToN64_v(M))).n8_i8[0])
 #elif defined UC_P32
-#define UC_P64(M) (UC_P32((M) >> 32) + UC_P32((M) & UINT32_C(0xFFFFFFFF)))
+#define UC_P64(M) (UC_P32((M) >> 32) + UC_P32((M) & 0xFFFFFFFF))
 #endif
 
 /* See, e.g., <http://graphics.stanford.edu/~seander/bithacks.html> */
@@ -143,7 +143,7 @@ typedef uint_least64_t uc_uint64_t;
 #define UC_RANK64(M, B) UC_P64((M) >> (63-(B)))
 #else
 typedef uint_least32_t uc_uint64_t[2];
-#define UC_UINT64_C(H, L) { UINT32_C(H), UINT32_C(L) }
+#define UC_UINT64_C(H, L) { (H), (L) }
 #define UC_RANK64(M, B) (UC_P32((M)[(B) >> 5] >> (31-((B) & 31))) + \
                          (UC_P32((M)[0]) & -((B) >> 5)))
 #endif
