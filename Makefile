@@ -42,6 +42,7 @@ uc_qcm.g: invoke ucdssv.awk uc_qcm.awk values.awk tables.awk $(SOURCES_QCM)
 	$(SHELL) ./invoke -o $@ -d ucd/data -- \
 	$(AWK) -f ucdssv.awk -f uc_qcm.awk -f values.awk -f tables.awk \
 	$(SOURCES_QCM)
+$(SOURCES_QCM):
 maintainer-clean: maintainer-clean-uc_qcm
 maintainer-clean-uc_qcm: ; test -d ucd/data && rm -f uc_qcm.g
 
