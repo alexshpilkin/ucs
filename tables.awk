@@ -142,7 +142,7 @@ END {
 	for (i = 1; i <= k2; i++) {
 		split(a2[i], p, " "); maskv[i] = p[1]; basev[i] = k2 + p[2]
 	}
-	for (i = 1; i <= k; i++) {
+	for (i = 1; i <= k1; i++) {
 		split(a1[i], p, " "); maskv[k2+i] = p[1]; basev[k2+i] = p[2]
 	}
 
