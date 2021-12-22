@@ -81,50 +81,16 @@ function pack(a,
 	return s
 }
 
+BEGIN { GROUP = 64; for (i = 0; i < GROUP; i++) none = none "0" }
+
 END {
-	GROUP = 64; n += GROUP*GROUP - n % (GROUP*GROUP) - 1 # round up
-	for (i = 0; i < GROUP; i++) none = none "0"
-
-	for (i = 0; i <= n; i++) {
-		if ((x = i in value ? value[i] : value[""]) != prev) {
-			prev = value[i] = x
-		} else if (i in value) {
-			delete value[i]
-		}
-	}
-	delete value[""]
-
-	for (i = prev = 0; i <= n; i += GROUP) {
+	for (i = 0; i <= n; i += GROUP*GROUP/BITS) {
 		m = "0"; any = i in value
 		s = (i in value ? last = value[i] : last) ","
-		for (j = i + 1; j < i + GROUP; j++) {
-			m = m (j in value); any = any || j in value
-			if (j in value) {
-				s = s (last = value[j]) ","; delete value[j]
-			}
-		}
-		if (any || prev) { value[i] = s; masks[i] = m }
-		prev = m != none
-	}
-	k = split(pack(value), a, ",") - 1
-
-	printf "const uint_least%u_t uc_%sr[] = {", BITS, NAME
-	for (i = 1; i <= k; i++) {
-		printf "%s%3u,",
-		       (i-1) % 10 ? " " : sprintf("\n\t/* %4u */ ", i-1),
-		       a[i]
-	}
-	printf "\n};\n"
-	octets += t = k * BITS/8
-	printf "sizeof uc_%sr\t= %u\n", NAME, t | "cat >&2"
-
-	for (i = 0; i <= n; i += GROUP) if (i in value)
-		value[i] = masks[i] " " value[i]
-
-	for (i = prev = 0; i <= n; i += GROUP*GROUP) {
-		m = "0"; any = i in value
-		s = (i in value ? last = value[i] : last) ","
-		for (j = i + GROUP; j < i + GROUP*GROUP; j += GROUP) {
+		for (j = i + GROUP/BITS;
+		     j < i + GROUP*GROUP/BITS;
+		     j += GROUP/BITS)
+		{
 			m = m (j in value); any = any || j in value
 			if (j in value) {
 				s = s (last = value[j]) ","; delete value[j]
@@ -135,7 +101,7 @@ END {
 	}
 	k1 = split(pack(value), a1, ",") - 1
 
-	for (i = 0; i <= n; i += GROUP*GROUP) if (i in value)
+	for (i = 0; i <= n; i += GROUP*GROUP/BITS) if (i in value)
 		value[i] = masks[i] " " value[i] ","
 	k2 = split(pack(value), a2, ",") - 1
 
@@ -167,7 +133,7 @@ END {
 	       t, k1 * GROUP/8, k2 * GROUP/8 | "cat >&2"
 
 	printf "const uint_least8_t uc_%si[] = {", NAME
-	for (i = k = 0; i <= n; i += GROUP*GROUP) {
+	for (i = k = 0; i <= n; i += GROUP*GROUP/BITS) {
 		printf "%s%3u,",
 		       k++ % 8 ? "" : sprintf("\n\t/* 0x%.6X */", i),
 		       i in value ? x = value[i] : x
