@@ -1,4 +1,5 @@
 END {
+	prev = "#" # not a C value
 	for (i = 0; i <= n; i++) {
 		if ((x = i in value ? value[i] : value[""]) != prev) {
 			prev = value[i] = x
@@ -7,6 +8,8 @@ END {
 		}
 	}
 	delete value[""]
+
+	if (!(0 in value)) exit 1
 
 	for (i = 0; i <= n; i += GROUP) {
 		m = "0"; any = i in value

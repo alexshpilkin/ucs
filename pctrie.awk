@@ -84,6 +84,8 @@ function pack(a,
 BEGIN { GROUP = 64; for (i = 0; i < GROUP; i++) none = none "0" }
 
 END {
+	if (!(0 in value)) exit 1
+
 	for (i = 0; i <= n; i += GROUP*GROUP/BITS) {
 		m = "0"; any = i in value
 		s = (i in value ? last = value[i] : last) ","
