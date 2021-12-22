@@ -8,10 +8,10 @@ uc_const uint_least32_t uc_ty(uint_least32_t uc) {
 	if unlikely(i >= sizeof uc_tyi / sizeof uc_tyi[0]) {
 		return 0;
 	} else {
-		unsigned p = uc_tyi[i], q, r, s;
-		q = uc_tyb[p] + UC_RANK64(uc_tym[p], j);
-		r = uc_tyb[q] + UC_RANK64(uc_tym[q], k);
-		s = uc_tyr[r];
-		return uc_tyv[(s >> 1) ^ (uc & s & 1)];
+		unsigned x = uc_tyi[i], y, z, w;
+		y = uc_tyb[x] + UC_RANK64(uc_tym[x], j);
+		z = uc_tyb[y] + UC_RANK64(uc_tym[y], k);
+		w = uc_tyr[z];
+		return uc_tyv[(w >> 1) ^ (uc & w & 1)];
 	}
 }
