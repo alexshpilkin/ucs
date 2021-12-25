@@ -49,6 +49,7 @@ extern "C" {
 #define has_builtin_expect      (__GNUC__ >= 3)
 #define has_builtin_popcount    (__GNUC__ * 100 + __GNUC_MINOR__ >= 304)
 #define has_builtin_popcountll  (__GNUC__ * 100 + __GNUC_MINOR__ >= 304)
+#define has_builtin_unreachable (__GNUC__ * 100 + __GNUC_MINOR__ >= 405)
 #endif
 #endif
 
@@ -112,6 +113,14 @@ extern "C" {
 #endif
 #endif
 
+#if has_builtin(unreachable)
+#define uc_unreachable (__builtin_unreachable())
+#elif has_assume
+#define uc_unreachable (__assume(0))
+#else
+#define uc_unreachable ((void)0)
+#endif
+
 #if has_builtin(popcount)
 #define UC_P32 __builtin_popcount
 #elif has_popcnt
@@ -145,11 +154,15 @@ uc_const int uc_p64(uint_least64_t); /* FIXME inline */
 typedef uint_least64_t uc_uint64_t;
 #define UC_UINT64_C(H, L) ((UINT64_C(H) << 32) | UINT64_C(L))
 #define UC_RANK64(M, B) UC_P64((M) >> (63-(B)))
+#define UC_HI32(M) ((uint_least32_t)((M) >> 32))
+#define UC_LO32(M) ((uint_least32_t)((M) & 0xFFFFFFFF))
 #else
 typedef uint_least32_t uc_uint64_t[2];
 #define UC_UINT64_C(H, L) { (H), (L) }
 #define UC_RANK64(M, B) (UC_P32((M)[(B) >> 5] >> (31-((B) & 31))) + \
                          (UC_P32((M)[0]) & -((B) >> 5)))
+#define UC_HI32(M) ((M)[0])
+#define UC_LO32(M) ((M)[1])
 #endif
 #endif
 

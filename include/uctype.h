@@ -94,7 +94,7 @@ extern const uint_least32_t uc_tyv[];
 extern const uint_least8_t  uc_tyr[];
 extern const uint_least16_t uc_tyb[];
 extern const uc_uint64_t    uc_tym[];
-extern const uint_least8_t  uc_tyi[(UNIMAX + 1) / 64 / 64];
+extern const uint_least8_t  uc_tyi[0x110000 / 64 / 64];
 
 uc_const uint_least32_t uc_ty(uint_least32_t); /* FIXME inline */
 
@@ -119,7 +119,7 @@ extern const uint_least32_t uc_qcv[];
 extern const uint_least8_t  uc_qcr[];
 extern const uint_least16_t uc_qcb[];
 extern const uc_uint64_t    uc_qcm[];
-extern const uint_least8_t  uc_qci[(UNIMAX + 1) / 64 / 64];
+extern const uint_least8_t  uc_qci[0x110000 / 64 / 64];
 
 uc_const uint_least32_t uc_qc(uint_least32_t); /* FIXME inline */
 

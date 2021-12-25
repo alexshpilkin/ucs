@@ -10,17 +10,28 @@ CFLAGS   = -fno-asynchronous-unwind-tables -fno-ident -fomit-frame-pointer \
 all clean check: ;
 maintainer-clean: clean ;
 
-OBJECTS_UC = uc_gcn.o uc_p32.o uc_p64.o uc_ty.o uc_tym.o uc_qcm.o
+OBJECTS_UC = decomp.o uc_dcm.o uc_gcn.o uc_p32.o uc_p64.o uc_ty.o uc_tym.o uc_qcm.o
 all: libuc.a
 libuc.a: $(OBJECTS_UC)
 	$(AR) $(ARFLAGS) $@ $(OBJECTS_UC)
 	if [ "$(RANLIB)" ]; then ranlib $@; fi
 $(OBJECTS_UC): include/uc_cnf.h
+decomp.o uc_dcm.o: include/uccomp.h
 uc_gcn.o uc_ty.o uc_tym.o: include/uctype.h
+uc_dcm.o: uc_dcm.g
 uc_tym.o: uc_tym.g
 uc_qcm.o: uc_qcm.g
 clean: clean-libuc
 clean-libuc: ; rm -f libuc.a $(OBJECTS_UC)
+
+SOURCES_DCM = ucd/data/UnicodeData.txt
+uc_dcm.g: invoke ucdssv.awk uc_dcm.awk pctrie.awk $(SOURCES_DCM)
+	$(SHELL) ./invoke -o $@ -d ucd/data \
+	$(AWK) -f ucdssv.awk -f uc_dcm.awk -f pctrie.awk \
+	$(SOURCES_DCM)
+$(SOURCES_DCM):
+maintainer-clean: maintainer-clean-uc_dcm
+maintainer-clean-uc_dcm: ; test -d ucd/data && rm -f uc_dcm.g
 
 SOURCES_TYM = ucd/data/extracted/DerivedGeneralCategory.txt \
               ucd/data/DerivedCoreProperties.txt \
@@ -45,6 +56,23 @@ uc_qcm.g: invoke ucdssv.awk uc_qcm.awk values.awk valrun.awk pctrie.awk $(SOURCE
 $(SOURCES_QCM):
 maintainer-clean: maintainer-clean-uc_qcm
 maintainer-clean-uc_qcm: ; test -d ucd/data && rm -f uc_qcm.g
+
+check: check-decomp
+check-decomp: check/decomp check/decomp.tsv
+	check/decomp | cmp check/decomp.tsv -
+check/decomp: check/decomp.o libuc.a
+	$(CC) $(LDFLAGS) -o $@ check/decomp.o libuc.a $(LOADLIBES) $(LDLIBS)
+check/decomp.o: include/uc_cnf.h include/uccomp.h
+clean: clean-check-decomp
+clean-check-decomp: ; rm -f check/decomp check/decomp.o
+
+check/decomp.tsv: invoke ucdssv.awk check/decomp.awk ucd/data/UnicodeData.txt
+	$(SHELL) ./invoke -o $@ -d ucd/data -- \
+	$(AWK) -f ucdssv.awk -f check/decomp.awk \
+	ucd/data/UnicodeData.txt
+ucd/data/UnicodeData.txt:
+maintainer-clean: maintainer-clean-check-decomp
+maintainer-clean-check-decomp: ; test -d ucd/data && rm -f check/decomp.tsv
 
 check: check-isualp
 check-isualp: check/isualp check/isualp.tsv
