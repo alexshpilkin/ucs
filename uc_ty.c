@@ -2,9 +2,9 @@
 #include "uctype.h"
 
 uc_const uint_least32_t uc_ty(uint_least32_t uc) {
-	const unsigned i =  uc >> 12, /* FIXME */
-	               j = (uc >>  6) & 63,
-	               k =  uc        & 63;
+	const unsigned i = uc >> uc_ty_shift1,
+	               j = uc >> uc_ty_shift2 & uc_ty_mask1,
+	               k = uc                 & uc_ty_mask2;
 	if unlikely(i >= sizeof uc_tyi / sizeof uc_tyi[0]) {
 		return 0;
 	} else {

@@ -12,7 +12,11 @@ function collect(i, j, k) {
 }
 
 END {
-	for (i = 0; i <= n; i++) if (i in cdm) collect(i, i)
+	for (i = 0; i <= n; i++) if (i in cdm) {
+		collect(i, i)
+		if (cdmax < cd[i]) cdmax = cd[i]
+	}
+	printf "uc_static_assert(DECOMP_MAX >= %d);\n", cdmax
 }
 
 $4 != 0 { set(ccc, $4+0) }
@@ -35,7 +39,8 @@ END {
 	# comfortable 10240 codepoints for long decompositions, more than the
 	# total codepoints in full compatibility decompositions as of 12.0.
 
-	BMPTOP = xtoi("D800") # FIXME export constant
+	BMPTOP = xtoi("D800")
+	printf "uc_static_assert(UC_BMPTOP == 0x%.4X);\n", BMPTOP
 
 	shortc = longc = 0
 	for (i = 0; i <= n; i++) if (i in cd) {

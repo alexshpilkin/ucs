@@ -96,6 +96,9 @@ extern const uint_least16_t uc_tyb[];
 extern const uc_uint64_t    uc_tym[];
 extern const uint_least8_t  uc_tyi[0x110000 / 64 / 64];
 
+enum { uc_ty_shift1 = 12, uc_ty_mask1 = 63 };
+enum { uc_ty_shift2 =  6, uc_ty_mask2 = 63 };
+
 uc_const uint_least32_t uc_ty(uint_least32_t); /* FIXME inline */
 
 /* FIXME not enum constants */
@@ -120,6 +123,9 @@ extern const uint_least8_t  uc_qcr[];
 extern const uint_least16_t uc_qcb[];
 extern const uc_uint64_t    uc_qcm[];
 extern const uint_least8_t  uc_qci[0x110000 / 64 / 64];
+
+enum { uc_qc_shift1 = 12, uc_qc_mask1 = 63 };
+enum { uc_qc_shift2 =  6, uc_qc_mask2 = 63 };
 
 uc_const uint_least32_t uc_qc(uint_least32_t); /* FIXME inline */
 

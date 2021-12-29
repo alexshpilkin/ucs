@@ -85,6 +85,20 @@ extern "C" {
 #endif
 #endif
 
+#ifndef uc_static_assert
+#if __STDC_VERSION__ >= 201811L /* N2310 */
+#define uc_static_assert(E) _Static_assert((E))
+#elif __cplusplus >= 201411L /* N4296 */
+#define uc_static_assert(E) static_assert((E))
+#elif __STDC_VERSION__ >= 200904L /* N1362 */
+#define uc_static_assert(E) _Static_assert((E), #E)
+#elif __cplusplus >= 200504L /* N1804 */
+#define uc_static_assert(E) static_assert((E), #E)
+#else
+#define uc_static_assert(E) extern char uc_err[2*!!(E)-1]
+#endif
+#endif
+
 #ifndef uc_const
 #if has_gnu_attribute(const)
 #define uc_const __attribute__((__const__))
