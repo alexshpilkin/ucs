@@ -1,5 +1,6 @@
 *.[goa]
 check/*.tsv
+check/cmbcls
 check/decomp
 check/isualp
 check/mincat

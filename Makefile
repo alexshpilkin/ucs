@@ -10,7 +10,7 @@ CFLAGS   = -fno-asynchronous-unwind-tables -fno-ident -fomit-frame-pointer \
 all clean check: ;
 maintainer-clean: clean ;
 
-OBJECTS_UC = decomp.o uc_dcm.o uc_gcn.o uc_p32.o uc_p64.o uc_ty.o uc_tym.o uc_qcm.o
+OBJECTS_UC = decomp.o uc_dcm.o uc_gcn.o uc_p32.o uc_p64.o uc_qc.o uc_qcm.o uc_ty.o uc_tym.o
 all: libuc.a
 libuc.a: $(OBJECTS_UC)
 	$(AR) $(ARFLAGS) $@ $(OBJECTS_UC)
@@ -56,6 +56,23 @@ uc_qcm.g: invoke ucdssv.awk uc_qcm.awk values.awk valrun.awk pctrie.awk $(SOURCE
 $(SOURCES_QCM):
 maintainer-clean: maintainer-clean-uc_qcm
 maintainer-clean-uc_qcm: ; test -d ucd/data && rm -f uc_qcm.g
+
+check: check-cmbcls
+check-cmbcls: check/cmbcls check/cmbcls.tsv
+	check/cmbcls | cmp check/cmbcls.tsv -
+check/cmbcls: check/cmbcls.o libuc.a
+	$(CC) $(LDFLAGS) -o $@ check/cmbcls.o libuc.a $(LOADLIBES) $(LDLIBS)
+check/cmbcls.o: include/uc_cnf.h include/uctype.h
+clean: clean-check-cmbcls
+clean-check-cmbcls: ; rm -f check/cmbcls check/cmbcls.o
+
+check/cmbcls.tsv: invoke ucdssv.awk check/cmbcls.awk ucd/data/UnicodeData.txt
+	$(SHELL) ./invoke -o $@ -d ucd/data -- \
+	$(AWK) -f ucdssv.awk -f check/cmbcls.awk \
+	ucd/data/UnicodeData.txt
+ucd/data/UnicodeData.txt:
+maintainer-clean: maintainer-clean-check-cmbcls
+maintainer-clean-check-cmbcls: ; test -d ucd/data && rm -f check/cmbcls.tsv
 
 check: check-decomp
 check-decomp: check/decomp check/decomp.tsv
