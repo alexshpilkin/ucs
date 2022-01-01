@@ -12,12 +12,13 @@ function mask(b, h, i) {
 }
 
 function pack(a,
-              i, j, k, l, s, t,
+              i, j, k, l, n, s, t,
               rootc, rootv,
               parent, offset, ostart,
               left, right, other,
               mergev, mergec, m)
 {
+	for (i in a) if (n < i+0) n = i+0
 	for (i = 0; i <= n; i++) if (i in a) {
 		for (j = 1; j <= rootc; j++) {
 			if (k = index("," a[rootv[j]], "," a[i])) {
@@ -96,9 +97,9 @@ END {
 
 	if (!(0 in value)) exit 1
 
-	for (i = 0; i <= n; i += GROUP*GROUP/BITS) {
+	for (i = 0; i < n + GROUP*GROUP/BITS; i += GROUP*GROUP/BITS) {
 		m = "0"; any = i in value
-		s = (i in value ? last = value[i] : last) ","
+		s = (i in value ? last = value[i] : last) ","; delete value[i]
 		for (j = i + GROUP/BITS;
 		     j < i + GROUP*GROUP/BITS;
 		     j += GROUP/BITS)
@@ -108,13 +109,15 @@ END {
 				s = s (last = value[j]) ","; delete value[j]
 			}
 		}
+		if (i > n) continue # avoid extra entry on last level
 		if (any || prev) { value[i] = s; masks[i] = m }
 		prev = m != none
 	}
 	k1 = split(pack(value), a1, ",") - 1
 
-	for (i = 0; i <= n; i += GROUP*GROUP/BITS) if (i in value)
-		value[i] = masks[i] " " value[i] ","
+	for (i = 0; i < n + GROUP*GROUP/BITS; i += GROUP*GROUP/BITS) {
+		if (i in value) value[i] = masks[i] " " value[i] ","
+	}
 	k2 = split(pack(value), a2, ",") - 1
 
 	for (i = 1; i <= k2; i++) {
@@ -144,7 +147,8 @@ END {
 	printf "sizeof uc_%sm\t= %u = %u + %u\n", NAME,
 	       t, k1 * GROUP/8, k2 * GROUP/8 | "cat >&2"
 
-	printf "const uint_least8_t uc_%si[] = {", NAME
+	printf "const uint_least8_t uc_%si[%d] = {",
+	       NAME, int((n + GROUP*GROUP/BITS - 1) / (GROUP*GROUP/BITS))
 	for (i = k = 0; i <= n; i += GROUP*GROUP/BITS) {
 		printf "%s%3u,",
 		       k++ % 8 ? "" : sprintf("\n\t/* 0x%.6X */", i),

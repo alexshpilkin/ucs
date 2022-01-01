@@ -57,6 +57,8 @@ END {
 		value[i] = shortc
 	}
 
+	while (!(n in value)) n--
+
 	# packing doesn't help here, so don't bother
 
 	printf "const uint_least16_t uc_%ss[] = {", NAME
@@ -86,7 +88,7 @@ END {
 
 	prev = 1
 
-	for (i = last = 0; i <= n; i += GROUP/BITS) {
+	for (i = last = 0; i < n + GROUP/BITS; i += GROUP/BITS) {
 		base = last
 		for (k = 1; k <= BITS; k++) mm[k] = ""
 		for (j = i; j < i + GROUP/BITS; j++) {

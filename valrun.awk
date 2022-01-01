@@ -1,4 +1,6 @@
 END {
+	while (!(n in value)) n--
+
 	prev = "#" # not a C value
 	for (i = 0; i <= n; i++) {
 		if ((x = i in value ? value[i] : value[""]) != prev) {
@@ -11,7 +13,7 @@ END {
 
 	if (!(0 in value)) exit 1
 
-	for (i = 0; i <= n; i += GROUP) {
+	for (i = 0; i < n + GROUP; i += GROUP) {
 		m = "0"; any = i in value
 		s = (i in value ? last = value[i] : last) ","
 		for (j = i + 1; j < i + GROUP; j++) {
@@ -35,7 +37,7 @@ END {
 	octets += t = k * BITS/8
 	printf "sizeof uc_%sr\t= %u\n", NAME, t | "cat >&2"
 
-	for (i = 0; i <= n; i += GROUP) if (i in value)
+	for (i = 0; i < n + GROUP; i += GROUP) if (i in value)
 		value[i] = masks[i] " " value[i]
 
 	BITS = 1

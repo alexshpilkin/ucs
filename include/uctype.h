@@ -122,7 +122,7 @@ extern const uint_least32_t uc_qcv[];
 extern const uint_least8_t  uc_qcr[];
 extern const uint_least16_t uc_qcb[];
 extern const uc_uint64_t    uc_qcm[];
-extern const uint_least8_t  uc_qci[0x110000 / 64 / 64];
+extern const uint_least8_t  uc_qci[0x30000 / 64 / 64];
 
 enum { uc_qc_shift1 = 12, uc_qc_mask1 = 63 };
 enum { uc_qc_shift2 =  6, uc_qc_mask2 = 63 };
