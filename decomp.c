@@ -24,25 +24,27 @@ identity:
 		default: uc_unreachable;
 		}
 	} else {
-		unsigned x = uc_dci[i], y, z, m; uint_least32_t a, b;
+		unsigned x = uc_dci[i], y, z, m;
 		uc_static_assert((uc_dc_mask1 + 1) / (uc_dc_mask2 + 1) == 2);
 		y = uc_dcb[x] + UC_RANK64(uc_dcm[x], j);
-		a = UC_HI32(uc_dcm[y]) >> (31-k); /* FIXME UC_RANK32 ? */
-		b = UC_LO32(uc_dcm[y]) >> (31-k);
-		m = (a & 1) * 2 + (b & 1);
+		m = UC_FLAG32(UC_HI32(uc_dcm[y]), k) * 2 +
+		    UC_FLAG32(UC_LO32(uc_dcm[y]), k);
 		if unlikely(!m)
 			goto identity;
-		z = uc_dcb[y] + UC_P32(a >> 1) * 2 + UC_P32(b >> 1);
-		if (uc_dcs[z] < UC_BMPTOP) {
+		z = uc_dcb[y] +
+		    UC_RANK32(UC_HI32(uc_dcm[y]), k) * 2 +
+		    UC_RANK32(UC_LO32(uc_dcm[y]), k);
+		if (uc_dcs[z-1] < UC_BMPTOP) {
+			const uint_least16_t *t = &uc_dcs[z-m];
 			switch (m > n ? n : m) {
-			case 3:  s[2] = uc_dcs[z+2]; uc_fallthrough;
-			case 2:  s[1] = uc_dcs[z+1]; uc_fallthrough;
-			case 1:  s[0] = uc_dcs[z];   uc_fallthrough;
+			case 3:  s[2] = t[2]; uc_fallthrough;
+			case 2:  s[1] = t[1]; uc_fallthrough;
+			case 1:  s[0] = t[0]; uc_fallthrough;
 			case 0:  return m;
 			default: uc_unreachable;
 			}
 		} else {
-			unsigned m = 0, r = uc_dcs[z] - UC_BMPTOP;
+			unsigned m = 0, r = uc_dcs[z-1] - UC_BMPTOP;
 			do {
 				/* int may be less than 32 bits */
 				uc = (uint_least32_t)uc_dcl[r][0] << 16 |

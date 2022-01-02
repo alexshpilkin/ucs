@@ -163,6 +163,13 @@ uc_const int uc_p64(uint_least64_t); /* FIXME inline */
 #define UC_P64 uc_p64
 #endif
 
+#ifndef UC_RANK32
+#define UC_RANK32(M, B) (UC_P32((M) >> (31-(B))))
+#endif
+#ifndef UC_FLAG32
+#define UC_FLAG32(M, B) ((M) >> (31-(B)) & 1)
+#endif
+
 #ifndef UC_UINT64_C
 #ifdef UINT64_C
 typedef uint_least64_t uc_uint64_t;
@@ -173,8 +180,8 @@ typedef uint_least64_t uc_uint64_t;
 #else
 typedef uint_least32_t uc_uint64_t[2];
 #define UC_UINT64_C(H, L) { (H), (L) }
-#define UC_RANK64(M, B) (UC_P32((M)[(B) >> 5] >> (31-((B) & 31))) + \
-                         (UC_P32((M)[0]) & -((B) >> 5)))
+#define UC_RANK64(M, B) (UC_RANK32((M)[(B) >> 5], (B) & 31) + \
+                         (UC_RANK32((M)[0]) & -((B) >> 5)))
 #define UC_HI32(M) ((M)[0])
 #define UC_LO32(M) ((M)[1])
 #endif
