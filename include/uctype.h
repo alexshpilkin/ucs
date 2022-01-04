@@ -14,8 +14,6 @@ extern "C" {
 
 #define UNIMAX UINT32_C(0x10FFFF)
 
-enum { MAJCAT = 007 };
-
 typedef enum majcat {
 	OTH    = 000, LET,    MRK,    NUM,    PCT    = 004, SYM,    SEP
 } majcat_t;
@@ -40,6 +38,7 @@ size_t strfromcat(char *uc_restrict, size_t, mincat_t); /* FIXME inline */
 /* These can't be enum constants because those must fit into an int, and an int
    is only guaranteed to fit 16-bit numbers */
 
+#define MAJCAT       ((UINT32_C(1) <<  3) - 1)
 #define majcat(U)     ((majcat_t)(uc_ty(U) & MAJCAT))
 #define UC_MINCAT    ((UINT32_C(1) <<  6) - 1)
 #define mincat(U)     ((mincat_t)(uc_ty(U) & UC_MINCAT))
