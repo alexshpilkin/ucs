@@ -85,6 +85,16 @@ extern "C" {
 #endif
 #endif
 
+#ifndef uc_unused
+#if has_attribute(maybe_unused)
+#define uc_unused [[__maybe_unused__]]
+#elif has_gnu_attribute(unused)
+#define uc_unused __attribute__((__unused__))
+#else
+#define uc_unused
+#endif
+#endif
+
 #ifndef uc_static_assert
 #if __STDC_VERSION__ >= 201811L /* N2310 */
 #define uc_static_assert(E) _Static_assert((E))
@@ -95,7 +105,7 @@ extern "C" {
 #elif __cplusplus >= 200504L /* N1804 */
 #define uc_static_assert(E) static_assert((E), #E)
 #else
-#define uc_static_assert(E) extern char uc_err[2*!!(E)-1]
+#define uc_static_assert(E) uc_unused extern char uc_err[2*!!(E)-1]
 #endif
 #endif
 
