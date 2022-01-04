@@ -3,7 +3,8 @@
 
 #include <stddef.h>
 
-/* FIXME WET, does not NULL-terminate */
+/* FIXME similar to uc_ty() */
+/* does not NUL-terminate */
 size_t decomp(uint_least32_t *uc_restrict s, size_t n, uint_least32_t uc) {
 	const unsigned i = uc >> uc_dc_shift1,
 	               j = uc >> uc_dc_shift2 & uc_dc_mask1,
@@ -16,7 +17,7 @@ identity:
 		               lv = sy / 28, t = sy % 28,
 		               l  = lv / 21, v = lv % 21,
 		               m  = 2 + !!t;
-		switch (m > n ? n : m) {
+		switch (m <= n ? m : n) {
 		case 3:  s[2] = 0x11A7 + t; uc_fallthrough;
 		case 2:  s[1] = 0x1161 + v; uc_fallthrough;
 		case 1:  s[0] = 0x1100 + l; uc_fallthrough;
@@ -36,7 +37,7 @@ identity:
 		    UC_RANK32(UC_LO32(uc_dcm[y]), k);
 		if (uc_dcs[z-1] < UC_BMPTOP) {
 			const uint_least16_t *t = &uc_dcs[z-m];
-			switch (m > n ? n : m) {
+			switch (m <= n ? m : n) {
 			case 3:  s[2] = t[2]; uc_fallthrough;
 			case 2:  s[1] = t[1]; uc_fallthrough;
 			case 1:  s[0] = t[0]; uc_fallthrough;
@@ -44,9 +45,8 @@ identity:
 			default: uc_unreachable;
 			}
 		} else {
-			unsigned m = 0, r = uc_dcs[z-1] - UC_BMPTOP;
+			unsigned r = uc_dcs[z-1] - UC_BMPTOP; m = 0;
 			do {
-				/* int may be less than 32 bits */
 				uc = (uint_least32_t)uc_dcl[r][0] << 16 |
 				     uc_dcl[r][1] << 8 | uc_dcl[r][2];
 				r++; if (m++ < n) *s++ = uc & 0x7FFFFF;
