@@ -7,8 +7,9 @@
 #define UNIMAX 0x10FFFF /* FIXME */
 
 int main(int argc, char **argv) {
-	uint_least32_t i; uint_least32_t buf[DECOMP_MAX];
+	uint_least32_t i;
 	for (i = 0; i < 2*(UNIMAX + 1); i++) {
+		uint_least32_t buf[DECOMP_MAX];
 		unsigned j, n = decomp(buf, sizeof buf / sizeof buf[0], i);
 		if (n > sizeof buf / sizeof buf[0])
 			abort();

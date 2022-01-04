@@ -4,9 +4,10 @@
 #include <stdio.h>
 
 int main(void) {
-	uint_least32_t i; int x;
+	uint_least32_t i;
 	for (i = 0; i < 2*(UNIMAX + 1); i++) {
-		if ((x = cmbcls(i))) printf("%.4" PRIXLEAST32 "\t%d\n", i, x);
+		int x = cmbcls(i); if (!x) continue;
+		printf("%.4" PRIXLEAST32 "\t%d\n", i, x);
 	}
 	return 0;
 }
