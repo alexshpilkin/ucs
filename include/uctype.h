@@ -33,7 +33,7 @@ typedef enum mincat {
 #define strfromcat uc_gcn /* use 6-character names */
 #define CAT_MAX 3
 
-int strfromcat(char *uc_restrict, size_t, mincat_t); /* FIXME inline */
+size_t strfromcat(char *uc_restrict, size_t, mincat_t); /* FIXME inline */
 
 #define UC_INT(V, M)  ((M) <= INT_MAX ? (int)((V) & (M)) : !!((V) & (M)))
 

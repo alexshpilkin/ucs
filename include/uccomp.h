@@ -23,7 +23,7 @@ enum { uc_dc_shift2 =  5, uc_dc_mask2 = 31 };
 #define UC_BMPTOP  UINT32_C(0xD800)
 #define DECOMP_MAX 4
 
-int decomp(uint_least32_t *uc_restrict s, size_t n, uint_least32_t uc); /* FIXME inline? */
+size_t decomp(uint_least32_t *uc_restrict s, size_t n, uint_least32_t uc); /* FIXME inline? */
 
 #ifdef __cplusplus
 }

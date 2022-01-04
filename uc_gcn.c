@@ -5,7 +5,7 @@
 
 /* FIXME keep in sync with mincat_t */
 
-int strfromcat(char *uc_restrict s, size_t n, mincat_t c) {
+size_t strfromcat(char *uc_restrict s, size_t n, mincat_t c) {
 	static const char name[PCTOTH+1] = {
 		'n', 'u', 'n', 'd', 'c', 'm', 's', '\0',
 		'c', 'l', 'c', 'l', 'd', 'c', 'l', '\0',

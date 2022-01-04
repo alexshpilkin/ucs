@@ -4,7 +4,7 @@
 #include <stddef.h>
 
 /* FIXME WET, does not NULL-terminate */
-int decomp(uint_least32_t *uc_restrict s, size_t n, uint_least32_t uc) {
+size_t decomp(uint_least32_t *uc_restrict s, size_t n, uint_least32_t uc) {
 	const unsigned i = uc >> uc_dc_shift1,
 	               j = uc >> uc_dc_shift2 & uc_dc_mask1,
 	               k = uc                 & uc_dc_mask2;
