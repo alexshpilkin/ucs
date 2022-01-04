@@ -5,31 +5,17 @@ $6 && $6 !~ /^</ {
 }
 
 BEGIN {
-	LBASE = xtoi("1100"); LCOUNT = 19
-	VBASE = xtoi("1161"); VCOUNT = 21
-	TBASE = xtoi("11A7"); TCOUNT = 28
-	SBASE = xtoi("AC00"); SCOUNT = LCOUNT * VCOUNT * TCOUNT
+	LBASE = xtoi("1100"); VBASE = xtoi("1161"); TBASE = xtoi("11A7")
+	SBASE = xtoi("AC00")
 
-	for (i = 0; i < SCOUNT; i++) {
-		dm[SBASE+i] = 2
-		lv = int(i / TCOUNT); t = i % TCOUNT
-		if (t) {
-			dm[SBASE+i,1] = SBASE + lv * TCOUNT
-			dm[SBASE+i,2] = TBASE + t
-		} else {
-			dm[SBASE+i,1] = LBASE + int(lv / VCOUNT)
-			dm[SBASE+i,2] = VBASE + lv % VCOUNT
+	for (l = 0; l < 19; l++) for (v = 0; v < 21; v++) {
+		lv = SBASE + (l * 21 + v) * 28
+		dm[lv] = 2; dm[lv,1] = LBASE + l; dm[lv,2] = VBASE + v
+		for (t = 1; t < 28; t++) { # TBASE itself is not a valid T
+			sy = lv + t
+			dm[sy] = 2; dm[sy,1] = lv; dm[sy,2] = TBASE + t
 		}
 	}
-
-	# Example from the Unicode standard, "Conjoining Jamo behaviour"
-
-	if (dm[xtoi("D4DB")] != 2) exit 1
-	if (dm[xtoi("D4DB"),1] != xtoi("D4CC")) exit 1
-	if (dm[xtoi("D4DB"),2] != xtoi("11B6")) exit 1
-	if (dm[xtoi("D4CC")] != 2) exit 1
-	if (dm[xtoi("D4CC"),1] != xtoi("1111")) exit 1
-	if (dm[xtoi("D4CC"),2] != xtoi("1171")) exit 1
 }
 
 function collect(i, s, j) {
