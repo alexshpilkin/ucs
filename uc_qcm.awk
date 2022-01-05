@@ -7,9 +7,8 @@ $2 == "NFC_QC"  && $3 != "Y"            { set(nfcqc,  $3) }
 $2 == "NFKD_QC" && $3 != "Y"            { set(nfkdqc, $3) }
 $2 == "NFKC_QC" && $3 != "Y"            { set(nfkcqc, $3) }
 
-$6 && $6 !~ /^</ {
-	if (n0 != n) exit 1
-	dm[n] = k = split($6, a, " ")
+$6 ~ /^[^<]/ {
+	k = dm[n] = split($6, a, " ")
 	for (j = 1; j <= k; j++) dm[n,j] = xtoi(a[j])
 }
 

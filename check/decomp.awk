@@ -1,4 +1,4 @@
-$6 && $6 !~ /^</ {
+$6 ~ /^[^<]/ {
 	if (n0 != n) exit 1
 	k = dm[n] = split($6, cs, " ")
 	for (i = 1; i <= k; i++) dm[n,i] = xtoi(cs[i])

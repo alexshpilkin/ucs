@@ -1,8 +1,7 @@
 BEGIN { NAME = "dc"; BITS = 2 }
 
-$6 && $6 !~ /^</ {
-	if (n0 != n) exit 1
-	cdm[n] = k = split($6, a, " ")
+$6 ~ /^[^<]/ {
+	k = cdm[n] = split($6, a, " ")
 	for (i = 1; i <= k; i++) cdm[n,i] = xtoi(a[i])
 }
 
