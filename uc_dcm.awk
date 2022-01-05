@@ -2,7 +2,7 @@ BEGIN { NAME = "dc"; BITS = 2 }
 
 $6 ~ /^[^<]/ {
 	k = cdm[n] = split($6, a, " ")
-	for (i = 1; i <= k; i++) cdm[n,i] = xtoi(a[i])
+	for (i = 1; i <= k; i++) cdm[n,i] = hex(a[i])
 }
 
 function collect(i, j, k) {
@@ -38,7 +38,7 @@ END {
 	# comfortable 10240 codepoints for long decompositions, more than the
 	# total codepoints in full compatibility decompositions as of 12.0.
 
-	BMPTOP = xtoi("D800")
+	BMPTOP = hex("D800")
 	printf "uc_static_assert(UC_BMPTOP == 0x%.4X);\n", BMPTOP
 
 	shortc = longc = 0

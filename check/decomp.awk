@@ -1,12 +1,12 @@
 $6 ~ /^[^<]/ {
 	if (n0 != n) exit 1
 	k = dm[n] = split($6, cs, " ")
-	for (i = 1; i <= k; i++) dm[n,i] = xtoi(cs[i])
+	for (i = 1; i <= k; i++) dm[n,i] = hex(cs[i])
 }
 
 BEGIN {
-	LBASE = xtoi("1100"); VBASE = xtoi("1161"); TBASE = xtoi("11A7")
-	SBASE = xtoi("AC00")
+	LBASE = hex("1100"); VBASE = hex("1161"); TBASE = hex("11A7")
+	SBASE = hex("AC00")
 
 	for (l = 0; l < 19; l++) for (v = 0; v < 21; v++) {
 		lv = SBASE + (l * 21 + v) * 28

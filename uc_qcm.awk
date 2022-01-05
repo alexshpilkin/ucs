@@ -9,7 +9,7 @@ $2 == "NFKC_QC" && $3 != "Y"            { set(nfkcqc, $3) }
 
 $6 ~ /^[^<]/ {
 	k = dm[n] = split($6, a, " ")
-	for (j = 1; j <= k; j++) dm[n,j] = xtoi(a[j])
+	for (j = 1; j <= k; j++) dm[n,j] = hex(a[j])
 }
 
 END {
@@ -17,9 +17,9 @@ END {
 	# (which are not listed in UnicodeData.txt) don't need to be taken into
 	# account for lcc and tcc.
 
-	for (i = 0; i <= 19; i++) if (xtoi("1100") + i in cmbcls) exit 1 # L
-	for (i = 0; i <= 21; i++) if (xtoi("1161") + i in cmbcls) exit 1 # V
-	for (i = 0; i <= 28; i++) if (xtoi("11A7") + i in cmbcls) exit 1 # T
+	for (i = 0; i <= 19; i++) if (hex("1100") + i in cmbcls) exit 1 # L
+	for (i = 0; i <= 21; i++) if (hex("1161") + i in cmbcls) exit 1 # V
+	for (i = 0; i <= 28; i++) if (hex("11A7") + i in cmbcls) exit 1 # T
 
 	for (i = 0; i <= n; i++) {
 		for (j = i; j in dm; j = dm[j,1]) continue
