@@ -6,7 +6,7 @@
 
 #define UNIMAX 0x10FFFF /* FIXME */
 
-int main(int argc, char **argv) {
+int main(void) {
 	uint_least32_t i;
 	for (i = 0; i < 2*(UNIMAX + 1); i++) {
 		uint_least32_t buf[DECOMP_MAX];

@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int main(int argc, char **argv) {
+int main(void) {
 	uint_least32_t i;
 	for (i = 0; i < 2*(UNIMAX + 1); i++) {
 		char buf[CAT_MAX];
