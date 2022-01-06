@@ -48,7 +48,8 @@ identity:
 			unsigned r = uc_dcs[z-1] - UC_BMPTOP; m = 0;
 			do {
 				uc = (uint_least32_t)uc_dcl[r][0] << 16 |
-				     uc_dcl[r][1] << 8 | uc_dcl[r][2];
+				     (uint_least32_t)uc_dcl[r][1] <<  8 |
+				     uc_dcl[r][2];
 				r++; if (m++ < n) *s++ = uc & 0x7FFFFF;
 			} while (!(uc & 0x800000));
 			return m;
