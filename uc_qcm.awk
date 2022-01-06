@@ -1,7 +1,6 @@
 BEGIN { NAME = "qc"; BITS = 32 }
 
 $2 ~ /^[0-9]+$/ && $2 != 0              { set(cmbcls, $2) }
-$2 == "Full_Composition_Exclusion"      { set(fce) }
 $2 == "NFD_QC"  && $3 != "Y"            { set(nfdqc,  $3) }
 $2 == "NFC_QC"  && $3 != "Y"            { set(nfcqc,  $3) }
 $2 == "NFKD_QC" && $3 != "Y"            { set(nfkdqc, $3) }
@@ -33,7 +32,6 @@ END {
 		value_  = "UC_CMBCLS_("(i in cmbcls ? cmbcls[i] : 0)")" \
 		          (i in lcc    ? " | UC_LCC_("lcc[i]")" : "") \
 		          (i in tcc    ? " | UC_TCC_("tcc[i]")" : "") \
-		          (i in fce    ? " | UC_FCE"            : "") \
 		          (i in nfdqc  ? " | UC_DQ"  nfdqc[i]   : "") \
 		          (i in nfcqc  ? " | UC_CQ"  nfcqc[i]   : "") \
 		          (i in nfkdqc ? " | UC_KDQ" nfkdqc[i]  : "") \
