@@ -191,7 +191,7 @@ typedef uint_least64_t uc_uint64_t;
 typedef uint_least32_t uc_uint64_t[2];
 #define UC_UINT64_C(H, L) { (H), (L) }
 #define UC_RANK64(M, B) (UC_RANK32((M)[(B) >> 5], (B) & 31) + \
-                         (UC_RANK32((M)[0]) & -((B) >> 5)))
+                         (UC_P32((M)[0]) & -((B) >> 5)))
 #define UC_HI32(M) ((M)[0])
 #define UC_LO32(M) ((M)[1])
 #endif
