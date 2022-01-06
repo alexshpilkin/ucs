@@ -14,7 +14,7 @@ OBJECTS_UC = decomp.o uc_dcm.o uc_gcn.o uc_p32.o uc_p64.o uc_qc.o uc_qcm.o uc_ty
 all: libuc.a
 libuc.a: $(OBJECTS_UC)
 	$(AR) $(ARFLAGS) $@ $(OBJECTS_UC)
-	if [ "$(RANLIB)" ]; then ranlib $@; fi
+	if [ "$(RANLIB)" ]; then $(RANLIB) $@; fi
 $(OBJECTS_UC): include/uc_cnf.h
 decomp.o uc_dcm.o: include/uccomp.h
 uc_gcn.o uc_ty.o uc_tym.o: include/uctype.h
