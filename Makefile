@@ -17,7 +17,7 @@ libuc.a: $(OBJECTS_UC)
 	if [ "$(RANLIB)" ]; then $(RANLIB) $@; fi
 $(OBJECTS_UC): include/uc_cnf.h
 decomp.o uc_dcm.o: include/uccomp.h
-uc_gcn.o uc_ty.o uc_tym.o: include/uctype.h
+uc_gcn.o uc_qc.o uc_qcm.o uc_ty.o uc_tym.o: include/uctype.h
 uc_dcm.o: uc_dcm.g
 uc_tym.o: uc_tym.g
 uc_qcm.o: uc_qcm.g
