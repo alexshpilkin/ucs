@@ -10,15 +10,16 @@ CFLAGS   = -fno-asynchronous-unwind-tables -fno-ident -fomit-frame-pointer \
 all clean check: ;
 maintainer-clean: clean ;
 
-OBJECTS_UC = decomp.o uc_dcm.o uc_gcn.o uc_p32.o uc_p64.o uc_qc.o uc_qcm.o uc_ty.o uc_tym.o
+OBJECTS_UC = decomp.o recomp.o uc_dcm.o uc_gcn.o uc_p32.o uc_p64.o uc_qc.o uc_qcm.o uc_rch.o uc_ty.o uc_tym.o
 all: libuc.a
 libuc.a: $(OBJECTS_UC)
 	$(AR) $(ARFLAGS) $@ $(OBJECTS_UC)
 	if [ "$(RANLIB)" ]; then $(RANLIB) $@; fi
 $(OBJECTS_UC): include/uc_cnf.h
-decomp.o uc_dcm.o: include/uccomp.h
+decomp.o recomp.o uc_dcm.o uc_rch.o: include/uccomp.h
 uc_gcn.o uc_qc.o uc_qcm.o uc_ty.o uc_tym.o: include/uctype.h
 uc_dcm.o: uc_dcm.g
+uc_rch.o: uc_rch.g
 uc_tym.o: uc_tym.g
 uc_qcm.o: uc_qcm.g
 clean: clean-libuc
@@ -43,6 +44,16 @@ uc_qcm.g: invoke ucdssv.awk uc_qcm.awk values.awk valrun.awk pctrie.awk $(SOURCE
 $(SOURCES_QCM):
 maintainer-clean: maintainer-clean-uc_qcm
 maintainer-clean-uc_qcm: ; test -d ucd/data && rm -f uc_qcm.g
+
+SOURCES_RCH = ucd/data/DerivedNormalizationProps.txt \
+              ucd/data/UnicodeData.txt
+uc_rch.g: invoke ucdssv.awk uc_rch.awk $(SOURCES_RCH)
+	$(SHELL) ./invoke -o $@ -d ucd/data -- \
+	$(AWK) -f ucdssv.awk -f uc_rch.awk \
+	$(SOURCES_RCH)
+$(SOURCES_RCH):
+maintainer-clean: maintainer-clean-uc_rch
+maintainer-clean-uc_rch: ; test -d ucd/data && rm -f uc_rch.g
 
 SOURCES_TYM = ucd/data/extracted/DerivedGeneralCategory.txt \
               ucd/data/DerivedCoreProperties.txt \
@@ -124,3 +135,20 @@ check/mincat.tsv: invoke ucdssv.awk check/mincat.awk ucd/data/UnicodeData.txt
 ucd/data/UnicodeData.txt:
 maintainer-clean: maintainer-clean-check-mincat
 maintainer-clean-check-mincat: ; test -d ucd/data && rm -f check/mincat.tsv
+
+check: check-recomp
+check-recomp: check/recomp check/recomp.tsv
+	check/recomp | cmp check/recomp.tsv -
+check/recomp: check/recomp.o libuc.a
+	$(CC) $(LDFLAGS) -o $@ check/recomp.o libuc.a $(LOADLIBES) $(LDLIBS)
+check/recomp.o: include/uc_cnf.h include/uccomp.h
+clean: clean-check-recomp
+clean-check-recomp: ; rm -f check/recomp check/recomp.o
+
+check/recomp.tsv: invoke ucdssv.awk check/recomp.awk ucd/data/CompositionExclusions.txt ucd/data/UnicodeData.txt
+	$(SHELL) ./invoke -o $@ -d ucd/data -- \
+	$(AWK) -f ucdssv.awk -f check/recomp.awk \
+	ucd/data/CompositionExclusions.txt ucd/data/UnicodeData.txt
+ucd/data/CompositionExclusions.txt ucd/data/UnicodeData.txt:
+maintainer-clean: maintainer-clean-check-recomp
+maintainer-clean-check-recomp: ; test -d ucd/data && rm -f check/recomp.tsv
