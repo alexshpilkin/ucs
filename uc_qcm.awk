@@ -20,11 +20,20 @@ END {
 	for (i = 0; i <= 21; i++) if (hex("1161") + i in cmbcls) exit 1 # V
 	for (i = 0; i <= 28; i++) if (hex("11A7") + i in cmbcls) exit 1 # T
 
+	classes[0] = 1; maxclass = 0
+	for (i = 0; i <= n; i++) if (i in cmbcls) {
+		if(!(cmbcls[i] in classes)) classes[cmbcls[i]] = 1
+		if (maxclass < cmbcls[i]) maxclass = cmbcls[i]
+	}
+	for (i = 0; i <= maxclass; i++) if (i in classes)
+		classes[i] = classc++
+	printf "uc_static_assert(UC_CLASSES >= %d);\n", classc
+
 	for (i = 0; i <= n; i++) {
 		for (j = i; j in dm; j = dm[j,1]) continue
-		if (j in cmbcls) lcc[i] = cmbcls[j]
+		if (j in cmbcls) lcc[i] = classes[cmbcls[j]]
 		for (j = i; j in dm; j = dm[j,dm[j]]) continue
-		if (j in cmbcls) tcc[i] = cmbcls[j]
+		if (j in cmbcls) tcc[i] = classes[cmbcls[j]]
 	}
 
 	value[""] = "UC_CMBCLS_(0)"

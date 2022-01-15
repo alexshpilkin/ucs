@@ -11,6 +11,8 @@ extern "C" {
 
 #include <stddef.h>
 
+#define UC_CLASSES 55 /* < 255 (sic, also used as a neutral lcc value) */
+
 #define UC_CMBCLS_SHIFT     0
 #define UC_CMBCLS   ((1 <<  8) - 1)
 #define UC_DQN       (1 <<  8)
