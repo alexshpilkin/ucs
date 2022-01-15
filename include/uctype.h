@@ -35,9 +35,6 @@ size_t strfromcat(char *uc_restrict, size_t, mincat_t); /* FIXME inline */
 
 #define UC_INT(V, M)  ((M) <= INT_MAX ? (int)((V) & (M)) : !!((V) & (M)))
 
-/* These can't be enum constants because those must fit into an int, and an int
-   is only guaranteed to fit 16-bit numbers */
-
 #define MAJCAT       ((UINT32_C(1) <<  3) - 1)
 #define majcat(U)     ((majcat_t)(uc_ty(U) & MAJCAT))
 #define UC_MINCAT    ((UINT32_C(1) <<  6) - 1)
@@ -99,34 +96,6 @@ enum { uc_ty_shift1 = 12, uc_ty_mask1 = 63 };
 enum { uc_ty_shift2 =  6, uc_ty_mask2 = 63 };
 
 uc_const uint_least32_t uc_ty(uint_least32_t); /* FIXME inline */
-
-/* FIXME not enum constants */
-
-#define UC_CMBCLS_SHIFT     0
-#define UC_CMBCLS   ((1 <<  8) - 1)
-#define UC_DQN       (1 <<  8)
-#define UC_KDQN      (1 <<  9)
-#define UC_CQN       (1 << 10)
-#define UC_CQM       (3 << 10)
-#define UC_KCQN      (1 << 12)
-#define UC_KCQM      (3 << 12)
-/* unused             1 << 14 */
-/* unused             1 << 15 */
-#define UC_LCC_SHIFT       16
-#define UC_TCC_SHIFT       24
-
-#define cmbcls(U) ((int)(uc_qc(U) & UC_CMBCLS))
-
-extern const uint_least32_t uc_qcv[];
-extern const uint_least8_t  uc_qcr[];
-extern const uint_least16_t uc_qcb[];
-extern const uc_uint64_t    uc_qcm[];
-extern const uint_least8_t  uc_qci[0x30000 / 64 / 64];
-
-enum { uc_qc_shift1 = 12, uc_qc_mask1 = 63 };
-enum { uc_qc_shift2 =  6, uc_qc_mask2 = 63 };
-
-uc_const uint_least32_t uc_qc(uint_least32_t); /* FIXME inline */
 
 #ifdef __cplusplus
 }

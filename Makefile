@@ -16,8 +16,8 @@ libuc.a: $(OBJECTS_UC)
 	$(AR) $(ARFLAGS) $@ $(OBJECTS_UC)
 	if [ "$(RANLIB)" ]; then $(RANLIB) $@; fi
 $(OBJECTS_UC): include/uc_cnf.h
-decomp.o recomp.o uc_dcm.o uc_rch.o: include/uccomp.h
-uc_gcn.o uc_qc.o uc_qcm.o uc_ty.o uc_tym.o: include/uctype.h
+decomp.o recomp.o uc_dcm.o uc_rch.o uc_qc.o uc_qcm.o: include/uccomp.h
+uc_gcn.o uc_ty.o uc_tym.o: include/uctype.h
 uc_dcm.o: uc_dcm.g
 uc_rch.o: uc_rch.g
 uc_tym.o: uc_tym.g
@@ -73,7 +73,7 @@ check-cmbcls: check/cmbcls check/cmbcls.tsv
 	check/cmbcls | cmp check/cmbcls.tsv -
 check/cmbcls: check/cmbcls.o libuc.a
 	$(CC) $(LDFLAGS) -o $@ check/cmbcls.o libuc.a $(LOADLIBES) $(LDLIBS)
-check/cmbcls.o: include/uc_cnf.h include/uctype.h
+check/cmbcls.o: include/uc_cnf.h include/uccomp.h
 clean: clean-check-cmbcls
 clean-check-cmbcls: ; rm -f check/cmbcls check/cmbcls.o
 

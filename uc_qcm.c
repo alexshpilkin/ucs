@@ -1,5 +1,5 @@
 #include "uc_cnf.h"
-#include "uctype.h"
+#include "uccomp.h"
 
 #define UC_CMBCLS_(C) (UINT32_C(C) << UC_CMBCLS_SHIFT)
 /* FIXME move to separate data file for FCD? */

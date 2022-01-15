@@ -1,7 +1,9 @@
-#include "uctype.h"
+#include "uccomp.h"
 
 #include <inttypes.h>
 #include <stdio.h>
+
+#define UNIMAX UINT32_C(0x10FFFF) /* FIXME */
 
 int main(void) {
 	uint_least32_t i;
