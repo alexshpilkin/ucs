@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define UNIMAX 0x10FFFF /* FIXME */
+#define UNIMAX UINT32_C(0x10FFFF) /* FIXME */
 
 int main(void) {
 	uint_least32_t i;
