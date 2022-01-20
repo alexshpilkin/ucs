@@ -86,14 +86,16 @@ size_t strfromcat(char *uc_restrict, size_t, mincat_t); /* FIXME inline */
 #define UC_XDIGIT     (UINT32_C(1) << 29)
 #define isuxdigit(U)  (UC_INT(uc_ty(U), UC_XDIGIT))
 
+#define UC_TY_SHIFT1 12
+#define UC_TY_MASK1  63
+#define UC_TY_SHIFT2  6
+#define UC_TY_MASK2  63
+
 extern const uint_least32_t uc_tyv[];
 extern const uint_least8_t  uc_tyr[];
 extern const uint_least16_t uc_tyb[];
 extern const uc_uint64_t    uc_tym[];
 extern const uint_least8_t  uc_tyi[0x110000 / 64 / 64];
-
-enum { uc_ty_shift1 = 12, uc_ty_mask1 = 63 };
-enum { uc_ty_shift2 =  6, uc_ty_mask2 = 63 };
 
 uc_const uint_least32_t uc_ty(uint_least32_t); /* FIXME inline */
 

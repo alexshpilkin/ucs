@@ -4,7 +4,7 @@
 #include <stdint.h>
 
 #define hash(A, B, X, Y) \
-	((uint_least32_t)(((A)*(X) + (B)*(Y)) & 0xFFFF) * uc_rc_size >> 16)
+	((uint_least32_t)(((A)*(X) + (B)*(Y)) & 0xFFFF) * UC_RC_SIZE >> 16)
 
 uint_least32_t recomp(uint_least32_t fst, uint_least32_t snd) {
 	if (0x1100 <= fst && fst < 0x1100 + 19) {
@@ -22,24 +22,24 @@ uint_least32_t recomp(uint_least32_t fst, uint_least32_t snd) {
 		return fst + (unsigned)(snd - 0x11A7);
 	} else {
 		uint_least32_t u; unsigned i, j, k, x, y, z, m;
-		uc_static_assert((uc_dc_mask1 + 1) / (uc_dc_mask2 + 1) == 2);
+		uc_static_assert((UC_DC_MASK1 + 1) / (UC_DC_MASK2 + 1) == 2);
 
 		if ((fst | snd) & ~(uint_least32_t)0x33FFF)
 			return 0;
 		x = (fst & 0x3FFF) | (fst & 0x30000) >> 2;
 		y = (snd & 0x3FFF) | (snd & 0x30000) >> 2;
 
-		u = uc_rch[hash(uc_rc_a1, uc_rc_b1, x, y)]
-		  ^ uc_rch[hash(uc_rc_a2, uc_rc_b2, x, y) +   uc_rc_size]
-		  ^ uc_rch[hash(uc_rc_a3, uc_rc_b3, x, y) + 2*uc_rc_size];
+		u = uc_rch[hash(UC_RC_A1, UC_RC_B1, x, y)]
+		  ^ uc_rch[hash(UC_RC_A2, UC_RC_B2, x, y) +   UC_RC_SIZE]
+		  ^ uc_rch[hash(UC_RC_A3, UC_RC_B3, x, y) + 2*UC_RC_SIZE];
 		if (u >> 16 != x) return 0;
 		u = (u & 0x3FFF) | (u << 2 & 0x30000);
 
 		/* FIXME Almost but not quite the same as decomp() */
 
-		i = u >> uc_dc_shift1;
-		j = u >> uc_dc_shift2 & uc_dc_mask1;
-		k = u                 & uc_dc_mask2;
+		i = u >> UC_DC_SHIFT1;
+		j = u >> UC_DC_SHIFT2 & UC_DC_MASK1;
+		k = u                 & UC_DC_MASK2;
 
 		if (i >= sizeof uc_dci / sizeof uc_dci[0])
 			return 0;

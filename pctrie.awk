@@ -90,10 +90,10 @@ BEGIN {
 END {
 	for (SHIFT = 0; 2^SHIFT != BITS; SHIFT++) continue
 
-	printf "uc_static_assert(uc_%s_shift1 == %2d && uc_%s_mask1 == %2d);\n",
-	       NAME, WIDTH*2 - SHIFT, NAME, GROUP - 1
-	printf "uc_static_assert(uc_%s_shift2 == %2d && uc_%s_mask2 == %2d);\n",
-	       NAME, WIDTH   - SHIFT, NAME, GROUP/BITS - 1
+	printf "uc_static_assert(UC_%s_SHIFT1 == %2d && UC_%s_MASK1 == %2d);\n",
+	       toupper(NAME), WIDTH*2 - SHIFT, toupper(NAME), GROUP - 1
+	printf "uc_static_assert(UC_%s_SHIFT2 == %2d && UC_%s_MASK2 == %2d);\n",
+	       toupper(NAME), WIDTH   - SHIFT, toupper(NAME), GROUP/BITS - 1
 
 	if (!(0 in value)) exit 1
 

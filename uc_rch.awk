@@ -88,9 +88,9 @@ END {
 		}
 
 		for (j = 1; j <= PARTS; j++) {
-			printf "uc_static_assert(uc_%s_a%d == %5d && " \
-			                        "uc_%s_b%d == %4d);\n",
-			       NAME, j, a[j], NAME, j, b[j]
+			printf "uc_static_assert(UC_%s_A%d == %5d && " \
+			                        "UC_%s_B%d == %4d);\n",
+			       toupper(NAME), j, a[j], toupper(NAME), j, b[j]
 		}
 		printf "const uint_least%d_t uc_%sh[%d] = {",
 		       32, NAME, PARTS * SIZE

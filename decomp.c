@@ -6,9 +6,9 @@
 /* FIXME similar to uc_ty() */
 /* does not NUL-terminate */
 size_t decomp(uint_least32_t *uc_restrict s, size_t n, uint_least32_t uc) {
-	const unsigned i = uc >> uc_dc_shift1,
-	               j = uc >> uc_dc_shift2 & uc_dc_mask1,
-	               k = uc                 & uc_dc_mask2;
+	const unsigned i = uc >> UC_DC_SHIFT1,
+	               j = uc >> UC_DC_SHIFT2 & UC_DC_MASK1,
+	               k = uc                 & UC_DC_MASK2;
 	if unlikely(i >= sizeof uc_dci / sizeof uc_dci[0]) {
 identity:
 		if (n) { *s = uc; } return 1;
@@ -26,7 +26,7 @@ identity:
 		}
 	} else {
 		unsigned x = uc_dci[i], y, z, m;
-		uc_static_assert((uc_dc_mask1 + 1) / (uc_dc_mask2 + 1) == 2);
+		uc_static_assert((UC_DC_MASK1 + 1) / (UC_DC_MASK2 + 1) == 2);
 		y = uc_dcb[x] + UC_RANK64(uc_dcm[x], j);
 		m = UC_FLAG32(UC_HI32(uc_dcm[y]), k) * 2 +
 		    UC_FLAG32(UC_LO32(uc_dcm[y]), k);
