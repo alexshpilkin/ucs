@@ -22,7 +22,7 @@ BEGIN {
 }
 
 END {
-	for (i in pt) if (m < i) m = i
+	for (i in pt) if (m < i+0) m = i+0
 
 	for (i = 0; i <= m; i++) if (i in pt)
 	for (j = 0; j <= m; j++) if (j in pt && (i,j) in cc)
