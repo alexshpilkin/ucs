@@ -55,7 +55,7 @@ function pack(a,
 		if (mergec < k) mergec = k
 	}
 
-	for (i = mergec + 0; i >= 0; i--) {
+	for (i = mergec+0; i >= 0; i--) {
 		for (j = 1; j <= mergev[i]; j += 2) {
 			if (mergev[i,j] in right || mergev[i,j+1] in left)
 				continue
