@@ -3,7 +3,7 @@ $4 != 0 { set(ns) }
 $6 ~ /^[^<]/ {
 	if (n0 != n) exit 1
 	if ((k = split($6, a, " ")) > 2) exit 1
-	if (k == 2 && !ce[n]) { # exclude singleton decompositions
+	if (k == 2 && !(n in ce)) { # exclude singletons and exclusions
 		cc[i = hex(a[1]), j = hex(a[2])] = n; pt[i] = pt[j] = 1
 	}
 }
