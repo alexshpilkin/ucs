@@ -69,86 +69,96 @@ maintainer-clean: maintainer-clean-uc_tym
 maintainer-clean-uc_tym: ; test -d ucd/data && rm -f uc_tym.g
 
 check: check-cmbcls
-check-cmbcls: check/cmbcls check/cmbcls.tsv
-	check/cmbcls | cmp check/cmbcls.tsv -
+check-cmbcls: check/cmbcls.ref check/cmbcls.out
+	cmp check/cmbcls.ref check/cmbcls.out
+check/cmbcls.out: check/cmbcls
+	check/cmbcls > $@
 check/cmbcls: check/cmbcls.o libuc.a
 	$(CC) $(LDFLAGS) -o $@ check/cmbcls.o libuc.a $(LOADLIBES) $(LDLIBS)
 check/cmbcls.o: include/uc_cnf.h include/uccomp.h
 clean: clean-check-cmbcls
-clean-check-cmbcls: ; rm -f check/cmbcls check/cmbcls.o
+clean-check-cmbcls: ; rm -f check/cmbcls.out check/cmbcls check/cmbcls.o
 
-check/cmbcls.tsv: invoke ucdssv.awk check/cmbcls.awk ucd/data/UnicodeData.txt
+check/cmbcls.ref: invoke ucdssv.awk check/cmbcls.awk ucd/data/UnicodeData.txt
 	$(SHELL) ./invoke -o $@ -d ucd/data -- \
 	$(AWK) -f ucdssv.awk -f check/cmbcls.awk \
 	ucd/data/UnicodeData.txt
 ucd/data/UnicodeData.txt:
 maintainer-clean: maintainer-clean-check-cmbcls
-maintainer-clean-check-cmbcls: ; test -d ucd/data && rm -f check/cmbcls.tsv
+maintainer-clean-check-cmbcls: ; test -d ucd/data && rm -f check/cmbcls.ref
 
 check: check-decomp
-check-decomp: check/decomp check/decomp.tsv
-	check/decomp | cmp check/decomp.tsv -
+check-decomp: check/decomp.ref check/decomp.out
+	cmp check/decomp.ref check/decomp.out
+check/decomp.out: check/decomp
+	check/decomp > $@
 check/decomp: check/decomp.o libuc.a
 	$(CC) $(LDFLAGS) -o $@ check/decomp.o libuc.a $(LOADLIBES) $(LDLIBS)
 check/decomp.o: include/uc_cnf.h include/uccomp.h
 clean: clean-check-decomp
-clean-check-decomp: ; rm -f check/decomp check/decomp.o
+clean-check-decomp: ; rm -f check/decomp.out check/decomp check/decomp.o
 
-check/decomp.tsv: invoke ucdssv.awk check/decomp.awk ucd/data/UnicodeData.txt
+check/decomp.ref: invoke ucdssv.awk check/decomp.awk ucd/data/UnicodeData.txt
 	$(SHELL) ./invoke -o $@ -d ucd/data -- \
 	$(AWK) -f ucdssv.awk -f check/decomp.awk \
 	ucd/data/UnicodeData.txt
 ucd/data/UnicodeData.txt:
 maintainer-clean: maintainer-clean-check-decomp
-maintainer-clean-check-decomp: ; test -d ucd/data && rm -f check/decomp.tsv
+maintainer-clean-check-decomp: ; test -d ucd/data && rm -f check/decomp.ref
 
 check: check-isualp
-check-isualp: check/isualp check/isualp.tsv
-	check/isualp | cmp check/isualp.tsv -
+check-isualp: check/isualp.ref check/isualp.out
+	cmp check/isualp.ref check/isualp.out
+check/isualp.out: check/isualp
+	check/isualp > $@
 check/isualp: check/isualp.o libuc.a
 	$(CC) $(LDFLAGS) -o $@ check/isualp.o libuc.a $(LOADLIBES) $(LDLIBS)
 check/isualp.o: include/uc_cnf.h include/uctype.h
 clean: clean-check-isualp
-clean-check-isualp: ; rm -f check/isualp check/isualp.o
+clean-check-isualp: ; rm -f check/isualp.out check/isualp check/isualp.o
 
-check/isualp.tsv: invoke ucdssv.awk check/isualp.awk ucd/data/DerivedCoreProperties.txt
+check/isualp.ref: invoke ucdssv.awk check/isualp.awk ucd/data/DerivedCoreProperties.txt
 	$(SHELL) ./invoke -o $@ -d ucd/data -- \
 	$(AWK) -f ucdssv.awk -f check/isualp.awk \
 	ucd/data/DerivedCoreProperties.txt
 ucd/data/DerivedCoreProperties.txt:
 maintainer-clean: maintainer-clean-check-isualp
-maintainer-clean-check-isualp: ; test -d ucd/data && rm -f check/isualp.tsv
+maintainer-clean-check-isualp: ; test -d ucd/data && rm -f check/isualp.ref
 
 check: check-mincat
-check-mincat: check/mincat check/mincat.tsv
-	check/mincat | cmp check/mincat.tsv -
+check-mincat: check/mincat.ref check/mincat.out
+	cmp check/mincat.ref check/mincat.out
+check/mincat.out: check/mincat
+	check/mincat > $@
 check/mincat: check/mincat.o libuc.a
 	$(CC) $(LDFLAGS) -o $@ check/mincat.o libuc.a $(LOADLIBES) $(LDLIBS)
 check/mincat.o: include/uc_cnf.h include/uctype.h
 clean: clean-check-mincat
-clean-check-mincat: ; rm -f check/mincat check/mincat.o
+clean-check-mincat: ; rm -f check/mincat.out check/mincat check/mincat.o
 
-check/mincat.tsv: invoke ucdssv.awk check/mincat.awk ucd/data/UnicodeData.txt
+check/mincat.ref: invoke ucdssv.awk check/mincat.awk ucd/data/UnicodeData.txt
 	$(SHELL) ./invoke -o $@ -d ucd/data -- \
 	$(AWK) -f ucdssv.awk -f check/mincat.awk \
 	ucd/data/UnicodeData.txt
 ucd/data/UnicodeData.txt:
 maintainer-clean: maintainer-clean-check-mincat
-maintainer-clean-check-mincat: ; test -d ucd/data && rm -f check/mincat.tsv
+maintainer-clean-check-mincat: ; test -d ucd/data && rm -f check/mincat.ref
 
 check: check-recomp
-check-recomp: check/recomp check/recomp.tsv
-	check/recomp | cmp check/recomp.tsv -
+check-recomp: check/recomp.ref check/recomp.out
+	cmp check/recomp.ref check/recomp.out
+check/recomp.out: check/recomp
+	check/recomp > $@
 check/recomp: check/recomp.o libuc.a
 	$(CC) $(LDFLAGS) -o $@ check/recomp.o libuc.a $(LOADLIBES) $(LDLIBS)
 check/recomp.o: include/uc_cnf.h include/uccomp.h
 clean: clean-check-recomp
-clean-check-recomp: ; rm -f check/recomp check/recomp.o
+clean-check-recomp: ; rm -f check/recomp.out check/recomp check/recomp.o
 
-check/recomp.tsv: invoke ucdssv.awk check/recomp.awk ucd/data/CompositionExclusions.txt ucd/data/UnicodeData.txt
+check/recomp.ref: invoke ucdssv.awk check/recomp.awk ucd/data/CompositionExclusions.txt ucd/data/UnicodeData.txt
 	$(SHELL) ./invoke -o $@ -d ucd/data -- \
 	$(AWK) -f ucdssv.awk -f check/recomp.awk \
 	ucd/data/CompositionExclusions.txt ucd/data/UnicodeData.txt
 ucd/data/CompositionExclusions.txt ucd/data/UnicodeData.txt:
 maintainer-clean: maintainer-clean-check-recomp
-maintainer-clean-check-recomp: ; test -d ucd/data && rm -f check/recomp.tsv
+maintainer-clean-check-recomp: ; test -d ucd/data && rm -f check/recomp.ref
