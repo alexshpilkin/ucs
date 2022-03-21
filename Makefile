@@ -73,8 +73,8 @@ check-cmbcls: check/cmbcls.ref check/cmbcls.out
 	cmp check/cmbcls.ref check/cmbcls.out
 check/cmbcls.out: check/cmbcls
 	check/cmbcls > $@
-check/cmbcls: check/cmbcls.o libuc.a
-	$(CC) $(LDFLAGS) -o $@ check/cmbcls.o libuc.a $(LOADLIBES) $(LDLIBS)
+check/cmbcls: check/cmbcls.o uc_qc.o uc_qcm.o
+	$(CC) $(LDFLAGS) -o $@ check/cmbcls.o uc_qc.o uc_qcm.o $(LOADLIBES) $(LDLIBS)
 check/cmbcls.o: include/uc_cnf.h include/uccomp.h
 clean: clean-check-cmbcls
 clean-check-cmbcls: ; rm -f check/cmbcls.out check/cmbcls check/cmbcls.o
@@ -92,8 +92,8 @@ check-decomp: check/decomp.ref check/decomp.out
 	cmp check/decomp.ref check/decomp.out
 check/decomp.out: check/decomp
 	check/decomp > $@
-check/decomp: check/decomp.o libuc.a
-	$(CC) $(LDFLAGS) -o $@ check/decomp.o libuc.a $(LOADLIBES) $(LDLIBS)
+check/decomp: check/decomp.o decomp.o uc_dcm.o
+	$(CC) $(LDFLAGS) -o $@ check/decomp.o decomp.o uc_dcm.o $(LOADLIBES) $(LDLIBS)
 check/decomp.o: include/uc_cnf.h include/uccomp.h
 clean: clean-check-decomp
 clean-check-decomp: ; rm -f check/decomp.out check/decomp check/decomp.o
@@ -111,8 +111,8 @@ check-isualp: check/isualp.ref check/isualp.out
 	cmp check/isualp.ref check/isualp.out
 check/isualp.out: check/isualp
 	check/isualp > $@
-check/isualp: check/isualp.o libuc.a
-	$(CC) $(LDFLAGS) -o $@ check/isualp.o libuc.a $(LOADLIBES) $(LDLIBS)
+check/isualp: check/isualp.o uc_ty.o uc_tym.o
+	$(CC) $(LDFLAGS) -o $@ check/isualp.o uc_ty.o uc_tym.o $(LOADLIBES) $(LDLIBS)
 check/isualp.o: include/uc_cnf.h include/uctype.h
 clean: clean-check-isualp
 clean-check-isualp: ; rm -f check/isualp.out check/isualp check/isualp.o
@@ -130,8 +130,8 @@ check-mincat: check/mincat.ref check/mincat.out
 	cmp check/mincat.ref check/mincat.out
 check/mincat.out: check/mincat
 	check/mincat > $@
-check/mincat: check/mincat.o libuc.a
-	$(CC) $(LDFLAGS) -o $@ check/mincat.o libuc.a $(LOADLIBES) $(LDLIBS)
+check/mincat: check/mincat.o uc_gcn.o uc_ty.o uc_tym.o
+	$(CC) $(LDFLAGS) -o $@ check/mincat.o uc_gcn.o uc_ty.o uc_tym.o $(LOADLIBES) $(LDLIBS)
 check/mincat.o: include/uc_cnf.h include/uctype.h
 clean: clean-check-mincat
 clean-check-mincat: ; rm -f check/mincat.out check/mincat check/mincat.o
@@ -149,8 +149,8 @@ check-recomp: check/recomp.ref check/recomp.out
 	cmp check/recomp.ref check/recomp.out
 check/recomp.out: check/recomp
 	check/recomp > $@
-check/recomp: check/recomp.o libuc.a
-	$(CC) $(LDFLAGS) -o $@ check/recomp.o libuc.a $(LOADLIBES) $(LDLIBS)
+check/recomp: check/recomp.o recomp.o uc_dcm.o uc_rch.o
+	$(CC) $(LDFLAGS) -o $@ check/recomp.o recomp.o uc_dcm.o uc_rch.o $(LOADLIBES) $(LDLIBS)
 check/recomp.o: include/uc_cnf.h include/uccomp.h
 clean: clean-check-recomp
 clean-check-recomp: ; rm -f check/recomp.out check/recomp check/recomp.o
