@@ -32,7 +32,8 @@ uc_dcm.g: invoke ucdssv.awk uc_dcm.awk pctrie.awk $(SOURCES_DCM)
 	$(SOURCES_DCM)
 $(SOURCES_DCM):
 maintainer-clean: maintainer-clean-uc_dcm
-maintainer-clean-uc_dcm: ; test -d ucd/data && rm -f uc_dcm.g
+maintainer-clean-uc_dcm:
+	$(SHELL) ./invoke -d ucd/data -- rm -f uc_dcm.g
 
 SOURCES_QCM = ucd/data/UnicodeData.txt \
               ucd/data/extracted/DerivedCombiningClass.txt \
@@ -43,7 +44,8 @@ uc_qcm.g: invoke ucdssv.awk uc_qcm.awk values.awk valrun.awk pctrie.awk $(SOURCE
 	$(SOURCES_QCM)
 $(SOURCES_QCM):
 maintainer-clean: maintainer-clean-uc_qcm
-maintainer-clean-uc_qcm: ; test -d ucd/data && rm -f uc_qcm.g
+maintainer-clean-uc_qcm:
+	$(SHELL) ./invoke -d ucd/data -- rm -f uc_qcm.g
 
 SOURCES_RCH = ucd/data/DerivedNormalizationProps.txt \
               ucd/data/UnicodeData.txt
@@ -53,7 +55,8 @@ uc_rch.g: invoke ucdssv.awk uc_rch.awk $(SOURCES_RCH)
 	$(SOURCES_RCH)
 $(SOURCES_RCH):
 maintainer-clean: maintainer-clean-uc_rch
-maintainer-clean-uc_rch: ; test -d ucd/data && rm -f uc_rch.g
+maintainer-clean-uc_rch:
+	$(SHELL) ./invoke -d ucd/data -- rm -f uc_rch.g
 
 SOURCES_TYM = ucd/data/extracted/DerivedGeneralCategory.txt \
               ucd/data/DerivedCoreProperties.txt \
@@ -66,7 +69,8 @@ uc_tym.g: invoke ucdssv.awk uc_tym.awk values.awk valrun.awk pctrie.awk $(SOURCE
 	$(SOURCES_TYM)
 $(SOURCES_TYM):
 maintainer-clean: maintainer-clean-uc_tym
-maintainer-clean-uc_tym: ; test -d ucd/data && rm -f uc_tym.g
+maintainer-clean-uc_tym:
+	$(SHELL) ./invoke -d ucd/data -- rm -f uc_tym.g
 
 check: check-cmbcls
 check-cmbcls: check/cmbcls.ref check/cmbcls.out
@@ -85,7 +89,8 @@ check/cmbcls.ref: invoke ucdssv.awk check/cmbcls.awk ucd/data/UnicodeData.txt
 	ucd/data/UnicodeData.txt
 ucd/data/UnicodeData.txt:
 maintainer-clean: maintainer-clean-check-cmbcls
-maintainer-clean-check-cmbcls: ; test -d ucd/data && rm -f check/cmbcls.ref
+maintainer-clean-check-cmbcls:
+	$(SHELL) ./invoke -d ucd/data -- rm -f check/cmbcls.ref
 
 check: check-decomp
 check-decomp: check/decomp.ref check/decomp.out
@@ -104,7 +109,8 @@ check/decomp.ref: invoke ucdssv.awk check/decomp.awk ucd/data/UnicodeData.txt
 	ucd/data/UnicodeData.txt
 ucd/data/UnicodeData.txt:
 maintainer-clean: maintainer-clean-check-decomp
-maintainer-clean-check-decomp: ; test -d ucd/data && rm -f check/decomp.ref
+maintainer-clean-check-decomp:
+	$(SHELL) ./invoke -d ucd/data -- rm -f check/decomp.ref
 
 check: check-isualp
 check-isualp: check/isualp.ref check/isualp.out
@@ -123,7 +129,8 @@ check/isualp.ref: invoke ucdssv.awk check/isualp.awk ucd/data/DerivedCorePropert
 	ucd/data/DerivedCoreProperties.txt
 ucd/data/DerivedCoreProperties.txt:
 maintainer-clean: maintainer-clean-check-isualp
-maintainer-clean-check-isualp: ; test -d ucd/data && rm -f check/isualp.ref
+maintainer-clean-check-isualp:
+	$(SHELL) ./invoke -d ucd/data -- rm -f check/isualp.ref
 
 check: check-mincat
 check-mincat: check/mincat.ref check/mincat.out
@@ -142,7 +149,8 @@ check/mincat.ref: invoke ucdssv.awk check/mincat.awk ucd/data/UnicodeData.txt
 	ucd/data/UnicodeData.txt
 ucd/data/UnicodeData.txt:
 maintainer-clean: maintainer-clean-check-mincat
-maintainer-clean-check-mincat: ; test -d ucd/data && rm -f check/mincat.ref
+maintainer-clean-check-mincat:
+	$(SHELL) ./invoke -d ucd/data -- rm -f check/mincat.ref
 
 check: check-recomp
 check-recomp: check/recomp.ref check/recomp.out
@@ -161,4 +169,5 @@ check/recomp.ref: invoke ucdssv.awk check/recomp.awk ucd/data/CompositionExclusi
 	ucd/data/CompositionExclusions.txt ucd/data/UnicodeData.txt
 ucd/data/CompositionExclusions.txt ucd/data/UnicodeData.txt:
 maintainer-clean: maintainer-clean-check-recomp
-maintainer-clean-check-recomp: ; test -d ucd/data && rm -f check/recomp.ref
+maintainer-clean-check-recomp:
+	$(SHELL) ./invoke -d ucd/data -- rm -f check/recomp.ref

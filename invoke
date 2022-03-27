@@ -11,9 +11,12 @@ while test $# -gt 0; do
 	shift
 done
 
-if test $# -lt 1 || test -z "$o"; then
-	echo "usage: $0 -o OUTPUT [TEST ...] [--] COMMAND"
+if test $# -lt 1; then
+	echo "usage: $0 [-o OUTPUT] [TEST ...] [--] COMMAND"
 	exit 64 # EX_USAGE
 fi
 
-"$@" > "$o" || { s=$?; rm "$o"; exit $s; }
+if test "$o"
+then "$@" > "$o" || { s=$?; rm -- "$o"; exit $s; }
+else exec "$@"
+fi
