@@ -1,4 +1,6 @@
 AWK = awk
+INSTALL = install
+
 ARFLAGS  = -cr
 CPPFLAGS = -std=c89 -Wall -Wimplicit-fallthrough -pedantic -U_FORTIFY_SOURCE
 CFLAGS   = -fno-asynchronous-unwind-tables -fno-ident -fomit-frame-pointer \
@@ -7,10 +9,11 @@ CFLAGS   = -fno-asynchronous-unwind-tables -fno-ident -fomit-frame-pointer \
 .c.o:
 	$(CC) -I include $(CPPFLAGS) $(CFLAGS) -c -o $@ $<
 
-all clean check: ;
+all check install clean: ;
 maintainer-clean: clean ;
 
 OBJECTS_UC = decomp.o recomp.o uc_dcm.o uc_gcn.o uc_p32.o uc_p64.o uc_qc.o uc_qcm.o uc_rch.o uc_ty.o uc_tym.o
+INCLUDES_UC = include/uc_cnf.h include/uccomp.h include/uctype.h
 all: libuc.a
 libuc.a: $(OBJECTS_UC)
 	$(AR) $(ARFLAGS) $@ $(OBJECTS_UC)
@@ -22,6 +25,12 @@ uc_dcm.o: uc_dcm.g
 uc_rch.o: uc_rch.g
 uc_tym.o: uc_tym.g
 uc_qcm.o: uc_qcm.g
+install: install-libuc
+install-libuc: $(INCLUDES_UC) libuc.a
+	$(INSTALL) -d $(DESTDIR)$(prefix)/include/
+	$(INSTALL) -m 0644 $(INCLUDES_UC) $(DESTDIR)$(prefix)/include/
+	$(INSTALL) -d $(DESTDIR)$(prefix)/lib/
+	$(INSTALL) -m 0644 libuc.a $(DESTDIR)$(prefix)/lib/
 clean: clean-libuc
 clean-libuc: ; rm -f libuc.a $(OBJECTS_UC)
 
