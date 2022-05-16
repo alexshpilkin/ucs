@@ -1,8 +1,10 @@
 *.[goa]
-check/*.out
-check/*.ref
-check/cmbcls
-check/decomp
-check/isualp
-check/mincat
-check/recomp
+/boiler.mk
+/check/*.out
+/check/*.ref
+/check/cmbcls
+/check/decomp
+/check/isualp
+/check/isualp.c
+/check/mincat
+/check/recomp

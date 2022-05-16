@@ -1,0 +1,26 @@
+uc_dcm.g: ucdssv.awk uc_dcm.awk pctrie.awk ucd/data/UnicodeData.txt
+uc_qcm.g: ucdssv.awk uc_qcm.awk values.awk valrun.awk pctrie.awk \
+          ucd/data/UnicodeData.txt \
+          ucd/data/extracted/DerivedCombiningClass.txt \
+          ucd/data/DerivedNormalizationProps.txt
+uc_rch.g: ucdssv.awk uc_rch.awk \
+          ucd/data/DerivedNormalizationProps.txt \
+          ucd/data/UnicodeData.txt
+uc_tym.g: ucdssv.awk uc_tym.awk values.awk valrun.awk pctrie.awk \
+          ucd/data/extracted/DerivedGeneralCategory.txt \
+          ucd/data/DerivedCoreProperties.txt \
+          ucd/data/PropList.txt \
+          ucd/data/extracted/DerivedNumericValues.txt \
+          data/HexDigitValues.txt
+
+check/cmbcls: include/uc_cnf.h include/uccomp.h uc_qc.o uc_qcm.o
+check/cmbcls.ref: ucdssv.awk check/cmbcls.awk ucd/data/UnicodeData.txt
+check/decomp: include/uc_cnf.h include/uccomp.h decomp.o uc_dcm.o
+check/decomp.ref: ucdssv.awk check/decomp.awk ucd/data/UnicodeData.txt
+check/isualp.c: infile.awk check/isu.in isu=isualpha
+check/isualp: include/uc_cnf.h include/uctype.h uc_ty.o uc_tym.o
+check/isualp.ref: ucdssv.awk check/isualp.awk ucd/data/DerivedCoreProperties.txt
+check/mincat: include/uc_cnf.h include/uctype.h uc_gcn.o uc_ty.o uc_tym.o
+check/mincat.ref: ucdssv.awk check/mincat.awk ucd/data/UnicodeData.txt
+check/recomp: include/uc_cnf.h include/uccomp.h recomp.o uc_dcm.o uc_rch.o
+check/recomp.ref: ucdssv.awk check/recomp.awk ucd/data/CompositionExclusions.txt ucd/data/UnicodeData.txt
