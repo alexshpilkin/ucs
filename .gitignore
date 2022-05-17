@@ -4,7 +4,7 @@
 /check/*.ref
 /check/cmbcls
 /check/decomp
-/check/isualp
-/check/isualp.c
+/check/isu[a-z][a-z][a-z]
+/check/isu[a-z][a-z][a-z].c
 /check/mincat
 /check/recomp

@@ -23,31 +23,32 @@ END {
 		cat_    = i in cat ? cat[i] : "Cn"
 		blank_  = cat_ == "Zs" || i == 9
 		graph_  = !(i in space) && cat_ !~ /C[cns]/
-		pdigit_ = cat_ == "Nd" && pxdigit[i]
+		pdigit_ = cat_ == "Nd" && i in pxdigit
 		palnum_ = i in alpha || pdigit_
 		ppunct_ = !(i in alpha) && cat_ ~ /^[PS]/
 		print_  = (graph_ || blank_) && cat_ != "Cc"
 		value_  = cat_ \
-		          (i in alnum  ? " | UC_ALNUM"  : "") \
-		          (i in alpha  ? " | UC_ALPHA"  : "") \
-		          (blank_      ? " | UC_BLANK"  : "") \
-		          (i in cased  ? " | UC_CASED"  : "") \
-		          (i in delim  ? " | UC_DELIM"  : "") \
-		          (graph_      ? " | UC_GRAPH"  : "") \
-		          (i in ident  ? " | UC_IDENT"  : "") \
-		          (i in ignor  ? " | UC_IGNOR"  : "") \
-		          (i in lower  ? " | UC_LOWER"  : "") \
-		          (i in nchar  ? " | UC_NCHAR"  : "") \
-		          (palnum_     ? " | UC_PALNUM" : "") \
-		          (pdigit_     ? " | UC_PDIGIT" : "") \
-		          (ppunct_     ? " | UC_PPUNCT" : "") \
-		          (print_      ? " | UC_PRINT"  : "") \
-		          (i in space  ? " | UC_SPACE"  : "") \
-		          (i in start  ? " | UC_START"  : "") \
-		          (i in upper  ? " | UC_UPPER"  : "") \
-		          (i in xdigit ? sprintf(" | UC_XDIGIT_(0x%X)",
-		                                 (i - digit[i]) % 16) \
-		                       : "") \
+		          (i in alnum   ? " | UC_ALNUM"   : "") \
+		          (i in alpha   ? " | UC_ALPHA"   : "") \
+		          (blank_       ? " | UC_BLANK"   : "") \
+		          (i in cased   ? " | UC_CASED"   : "") \
+		          (i in delim   ? " | UC_DELIM"   : "") \
+		          (graph_       ? " | UC_GRAPH"   : "") \
+		          (i in ident   ? " | UC_IDENT"   : "") \
+		          (i in ignor   ? " | UC_IGNOR"   : "") \
+		          (i in lower   ? " | UC_LOWER"   : "") \
+		          (i in nchar   ? " | UC_NCHAR"   : "") \
+		          (palnum_      ? " | UC_PALNUM"  : "") \
+		          (pdigit_      ? " | UC_PDIGIT"  : "") \
+		          (ppunct_      ? " | UC_PPUNCT"  : "") \
+		          (print_       ? " | UC_PRINT"   : "") \
+		          (i in pxdigit ? " | UC_PXDIGIT" : "") \
+		          (i in space   ? " | UC_SPACE"   : "") \
+		          (i in start   ? " | UC_START"   : "") \
+		          (i in upper   ? " | UC_UPPER"   : "") \
+		          (i in xdigit  ? sprintf(" | UC_XDIGIT_(0x%X)",
+		                                  (i - digit[i]) % 16) \
+		                        : "") \
 		          ""
 		if (value_ != value[""]) value[i] = value_
 	}
