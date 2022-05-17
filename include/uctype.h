@@ -72,7 +72,7 @@ size_t strfromcat(char *uc_restrict, size_t, mincat_t); /* FIXME inline */
 #define isuppunct(U)  (UC_INT(uc_ty(U), UC_PPUNCT))
 #define UC_PRINT      (UINT32_C(1) << 23)
 #define isuprint(U)   (UC_INT(uc_ty(U), UC_PRINT))
-#define isupunct(U)   ((gencat(U) & CATGRP) == PCT)
+#define isupunct(U)   (majcat(U) == PCT)
 #define UC_PXDIGIT    (UINT32_C(1) << 24)
 #define isupxdigit(U) (UC_INT(uc_ty(U), UC_PXDIGIT))
 #define UC_SNTAX      (UINT32_C(1) << 25)

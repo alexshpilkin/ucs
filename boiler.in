@@ -17,9 +17,78 @@ check/cmbcls: include/uc_cnf.h include/uccomp.h uc_qc.o uc_qcm.o
 check/cmbcls.ref: ucdssv.awk check/cmbcls.awk ucd/data/UnicodeData.txt
 check/decomp: include/uc_cnf.h include/uccomp.h decomp.o uc_dcm.o
 check/decomp.ref: ucdssv.awk check/decomp.awk ucd/data/UnicodeData.txt
+check/isualn.c: infile.awk check/isu.in isu=isualnum
+check/isualn: include/uc_cnf.h include/uctype.h uc_ty.o uc_tym.o
+check/isualn.ref: ucdssv.awk check/isualn.awk ucd/data/DerivedCoreProperties.txt ucd/data/UnicodeData.txt
 check/isualp.c: infile.awk check/isu.in isu=isualpha
 check/isualp: include/uc_cnf.h include/uctype.h uc_ty.o uc_tym.o
 check/isualp.ref: ucdssv.awk check/isualp.awk ucd/data/DerivedCoreProperties.txt
+check/isuasc.c: infile.awk check/isu.in isu=isuascii
+check/isuasc: include/uc_cnf.h include/uctype.h uc_ty.o uc_tym.o
+check/isuasc.ref: ucdssv.awk check/isuasc.awk ucd/data/Blocks.txt
+check/isubla.c: infile.awk check/isu.in isu=isublank
+check/isubla: include/uc_cnf.h include/uctype.h uc_ty.o uc_tym.o
+check/isubla.ref: ucdssv.awk check/isubla.awk ucd/data/NameAliases.txt ucd/data/UnicodeData.txt
+check/isucas.c: infile.awk check/isu.in isu=isucased
+check/isucas: include/uc_cnf.h include/uctype.h uc_ty.o uc_tym.o
+check/isucas.ref: ucdssv.awk check/isucas.awk ucd/data/DerivedCoreProperties.txt
+check/isucnt.c: infile.awk check/isu.in isu=isucntrl
+check/isucnt: include/uc_cnf.h include/uctype.h uc_ty.o uc_tym.o
+check/isucnt.ref: ucdssv.awk check/isucnt.awk ucd/data/UnicodeData.txt
+check/isudel.c: infile.awk check/isu.in isu=isudelim
+check/isudel: include/uc_cnf.h include/uctype.h uc_ty.o uc_tym.o
+check/isudel.ref: ucdssv.awk check/isudel.awk ucd/data/PropList.txt
+check/isudig.c: infile.awk check/isu.in isu=isudigit
+check/isudig: include/uc_cnf.h include/uctype.h uc_ty.o uc_tym.o
+check/isudig.ref: ucdssv.awk check/isudig.awk ucd/data/UnicodeData.txt
+check/isugra.c: infile.awk check/isu.in isu=isugraph
+check/isugra: include/uc_cnf.h include/uctype.h uc_ty.o uc_tym.o
+check/isugra.ref: ucdssv.awk check/isugra.awk ucd/data/PropList.txt ucd/data/UnicodeData.txt
+check/isuide.c: infile.awk check/isu.in isu=isuident
+check/isuide: include/uc_cnf.h include/uctype.h uc_ty.o uc_tym.o
+check/isuide.ref: ucdssv.awk check/isuide.awk ucd/data/DerivedCoreProperties.txt
+check/isuign.c: infile.awk check/isu.in isu=isuignor
+check/isuign: include/uc_cnf.h include/uctype.h uc_ty.o uc_tym.o
+check/isuign.ref: ucdssv.awk check/isuign.awk ucd/data/DerivedCoreProperties.txt
+check/isulow.c: infile.awk check/isu.in isu=isulower
+check/isulow: include/uc_cnf.h include/uctype.h uc_ty.o uc_tym.o
+check/isulow.ref: ucdssv.awk check/isulow.awk ucd/data/DerivedCoreProperties.txt
+check/isunch.c: infile.awk check/isu.in isu=isunchar
+check/isunch: include/uc_cnf.h include/uctype.h uc_ty.o uc_tym.o
+check/isunch.ref: ucdssv.awk check/isunch.awk ucd/data/PropList.txt
+check/isupal.c: infile.awk check/isu.in isu=isupalnum
+check/isupal: include/uc_cnf.h include/uctype.h uc_ty.o uc_tym.o
+check/isupal.ref: ucdssv.awk check/isupal.awk ucd/data/DerivedCoreProperties.txt ucd/data/UnicodeData.txt
+check/isupdi.c: infile.awk check/isu.in isu=isupdigit
+check/isupdi: include/uc_cnf.h include/uctype.h uc_ty.o uc_tym.o
+check/isupdi.ref: ucdssv.awk check/isupdi.awk ucd/data/UnicodeData.txt
+check/isuppu.c: infile.awk check/isu.in isu=isuppunct
+check/isuppu: include/uc_cnf.h include/uctype.h uc_ty.o uc_tym.o
+check/isuppu.ref: ucdssv.awk check/isuppu.awk ucd/data/DerivedCoreProperties.txt ucd/data/UnicodeData.txt
+check/isupri.c: infile.awk check/isu.in isu=isuprint
+check/isupri: include/uc_cnf.h include/uctype.h uc_ty.o uc_tym.o
+check/isupri.ref: ucdssv.awk check/isupri.awk ucd/data/NameAliases.txt ucd/data/PropList.txt ucd/data/UnicodeData.txt
+check/isupun.c: infile.awk check/isu.in isu=isupunct
+check/isupun: include/uc_cnf.h include/uctype.h uc_ty.o uc_tym.o
+check/isupun.ref: ucdssv.awk check/isupun.awk ucd/data/UnicodeData.txt
+check/isupxd.c: infile.awk check/isu.in isu=isupxdigit
+check/isupxd: include/uc_cnf.h include/uctype.h uc_ty.o uc_tym.o
+check/isupxd.ref: ucdssv.awk check/isupxd.awk ucd/data/UnicodeData.txt
+check/isusnt.c: infile.awk check/isu.in isu=isusntax
+check/isusnt: include/uc_cnf.h include/uctype.h uc_ty.o uc_tym.o
+check/isusnt.ref: ucdssv.awk check/isusnt.awk ucd/data/DerivedCoreProperties.txt
+check/isuspa.c: infile.awk check/isu.in isu=isuspace
+check/isuspa: include/uc_cnf.h include/uctype.h uc_ty.o uc_tym.o
+check/isuspa.ref: ucdssv.awk check/isuspa.awk ucd/data/PropList.txt
+check/isusta.c: infile.awk check/isu.in isu=isustart
+check/isusta: include/uc_cnf.h include/uctype.h uc_ty.o uc_tym.o
+check/isusta.ref: ucdssv.awk check/isusta.awk ucd/data/DerivedCoreProperties.txt
+check/isuupp.c: infile.awk check/isu.in isu=isuupper
+check/isuupp: include/uc_cnf.h include/uctype.h uc_ty.o uc_tym.o
+check/isuupp.ref: ucdssv.awk check/isuupp.awk ucd/data/DerivedCoreProperties.txt
+check/isuxdi.c: infile.awk check/isu.in isu=isuxdigit
+check/isuxdi: include/uc_cnf.h include/uctype.h uc_ty.o uc_tym.o
+check/isuxdi.ref: ucdssv.awk check/isuxdi.awk ucd/data/PropList.txt ucd/data/UnicodeData.txt
 check/mincat: include/uc_cnf.h include/uctype.h uc_gcn.o uc_ty.o uc_tym.o
 check/mincat.ref: ucdssv.awk check/mincat.awk ucd/data/UnicodeData.txt
 check/recomp: include/uc_cnf.h include/uccomp.h recomp.o uc_dcm.o uc_rch.o
