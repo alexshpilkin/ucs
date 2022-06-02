@@ -9,10 +9,9 @@ uc_const uint_least32_t uc_qc(uint_least32_t uc) {
 	if unlikely(i >= sizeof uc_qci / sizeof uc_qci[0]) {
 		return 0;
 	} else {
-		unsigned x = uc_qci[i], y, z, w;
+		unsigned x = uc_qci[i], y, z;
 		y = uc_qcb[x] + UC_RANK64(uc_qcm[x], j);
 		z = uc_qcb[y] + UC_RANK64(uc_qcm[y], k);
-		w = uc_qcr[z];
-		return uc_qcv[(w >> 1) ^ (uc & w & 1)];
+		return uc_qcv[uc_qcr[z]];
 	}
 }

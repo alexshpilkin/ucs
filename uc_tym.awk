@@ -1,4 +1,4 @@
-BEGIN { NAME = "ty"; BITS = 32 }
+BEGIN { NAME = "ty"; BITS = 32; INTERLEAVED = 1 }
 
 $2 ~ /^[A-Z][a-z]$/ && $2 != "Cn"       { set(cat, $2) }
 $2 == "Alphabetic"                      { set(alnum) set(alpha) }
