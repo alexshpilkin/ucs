@@ -45,7 +45,7 @@ $0 ~ /\.awk/ {
 	printf "all: %s\n", name
 	printf "%s: %s.ref %s.out\n\tcmp %s.ref %s.out\n",
 	       name, stem, stem, stem, stem
-	printf "%s.out: %s %s.ref\n\t%s < %s.ref > $@\n",
+	printf "%s.out: %s %s.ref\n\t$(VALGRIND) %s < %s.ref > $@\n",
 	       stem, $1, stem, $1, stem
 
 	printf "%s: %s.o", $1, stem

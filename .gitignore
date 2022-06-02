@@ -1,4 +1,6 @@
-*.[goa]
+*.[ago]
+.cache
+.direnv
 /boiler.mk
 /check/*.out
 /check/*.ref
