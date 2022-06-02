@@ -34,26 +34,6 @@ static void die_(const char *file, int line) {
 
 #define die() die_(__FILE__, __LINE__)
 
-/* FIXME */
-static void ucsdec_new(uint_least32_t *uc_restrict dst,
-                       size_t *uc_restrict pdn,
-	               const uint_least32_t *uc_restrict src,
-                       size_t *uc_restrict psn)
-{
-	size_t dn = pdn ? *pdn : -1, dk = dn;
-	size_t sn = psn ? *psn : -1, sk = sn;
-	ucerr_t err = ucsdec(dst, &dk, src, &sk);
-	if (sk > sn || dk > dn) die();
-	switch (err) {
-	case UDONE: if (src[sn-sk-1] || dst[dn-dk-1]) die(); break;
-	case U2BIG: if (dk) die(); break;
-	case UMORE: if (sk != sn && cmbcls(src[sn-sk-1]) > 1) die(); break;
-	default:    die();
-	}
-	if (pdn) *pdn = dn - dk;
-	if (psn) *psn = sn - sk;
-}
-
 static void clear(uint_least32_t *uc_restrict p, size_t n) {
 	while (n--) *p++ = -1; /* not a valid Unicode character */
 }
@@ -105,7 +85,7 @@ static void line(void) {
 		umemmove(src = srcs[srcn-1], srcs[countof(srcs)-1], srcn);
 		clear(dst = dsts[countof(dsts)-1], countof(dsts));
 		dstn = countof(dsts); srcm = srcn;
-		ucsdec_new(dst, &dstn, src, &srcm);
+		ucsdec(dst, &dstn, src, &srcm);
 		/* must fit into output buffer */
 		if (dstn == countof(dsts)) die();
 		/* must not touch unused output space */
@@ -132,7 +112,7 @@ static void line(void) {
 
 			shortdst = dsts[countof(dsts)-1];
 			shortsrcm = srcm + 1; shortdstm = countof(dsts);
-			ucsdec_new(shortdst, &shortdstm, shortsrc, &shortsrcm);
+			ucsdec(shortdst, &shortdstm, shortsrc, &shortsrcm);
 			/* must consume all input */
 			if (shortsrcm != srcm + 1) die();
 			/* must reproduce final null */
@@ -170,7 +150,7 @@ static void line(void) {
 
 				moddst = dsts[countof(dsts)-1];
 				modsrcm = srcn + 2; moddstm = countof(dsts);
-				ucsdec_new(moddst, &moddstm, modsrc, &modsrcm);
+				ucsdec(moddst, &moddstm, modsrc, &modsrcm);
 				/* must consume all input */
 				if (modsrcm != srcn + 2) die();
 				/* must produce at least the partial output */
@@ -191,7 +171,7 @@ static void line(void) {
 
 		for (; dstn; dstn--) {
 			size_t dstm = dstn; srcm = srcn;
-			ucsdec_new(dst = dsts[dstm-1], &dstm, src, &srcm);
+			ucsdec(dst = dsts[dstm-1], &dstm, src, &srcm);
 			/* must fill all available output space */
 			if (dstm != dstn) die();
 			/* must match the reference result */

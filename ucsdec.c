@@ -12,14 +12,13 @@
    and the stability policy does guarantee this will remain true going forward.
    Both of these assumptions are checked by the generator in uc_dcm.awk. */
 
-static int slowpath(uint_least32_t *uc_restrict *uc_restrict pdst,
+static int slowpath(uint_least32_t *uc_restrict dst,
                     size_t *uc_restrict pdn,
-                    const uint_least32_t *uc_restrict *uc_restrict psrc,
+                    const uint_least32_t *uc_restrict src,
                     size_t *uc_restrict psn)
 {
-	const uint_least32_t *uc_restrict src = *psrc; size_t sn = *psn;
-	uint_least32_t *const uc_restrict dst = *pdst; const size_t dn = *pdn;
-	size_t n;
+	size_t sn = *psn, dn = *pdn;
+	size_t s0 = 0, sm = 0, dm = 0;
 
 	/* The obvious linear-time approach here would be a counting sort of
 	   combining classes, but then both the initialization and the
@@ -29,38 +28,28 @@ static int slowpath(uint_least32_t *uc_restrict *uc_restrict pdst,
 	   of classes we encountered, for a much slower but still constant-time
 	   worst case (UC_CLASSES^2) but hopefully faster common case. */
 
-	size_t size, base[UC_CLASSES];
+	size_t base[UC_CLASSES];
 	unsigned char k, count, order[UC_CLASSES];
 
 	uint_least32_t cd[DECOMP_MAX];
 	unsigned j, m; unsigned char cc;
 
-	n = count = 0;
+	count = 0;
 
 	m = decomp(cd, sizeof cd / sizeof cd[0], src[0]);
-	for (j = size = base[0] = 0; j < m; j++, size++) {
-		if ((cc = uc_tcc(cd[j])))
-			goto nonstarter;
-		if (size >= dn) { /* FIXME common exit? */
-			/* no source characters were fully consumed */
-			if (dst) *pdst = dst + dn;
-			*pdn = 0; return U2BIG;
-		}
-		if (dst) dst[size] = cd[j];
+	for (j = 0; j < m; j++, dm++) {
+		if ((cc = uc_tcc(cd[j]))) goto nonstarter;
+		if (dm >= dn) { *psn = 0; return -1; }
+		if (dst) dst[dm] = cd[j];
 	}
 
 	/* decomposition of the first character contained only starters */
-	src++; sn--;
+	s0 = sm = 1;
 
-	for (;; n++) {
-		if (n >= sn) { /* FIXME common exit? */
-			*psrc = src; *psn = sn;
-			if (dst) *pdst = dst + size;
-			*pdn = dn - size; return UMORE;
-		}
-		m = decomp(cd, sizeof cd / sizeof cd[0], src[n]);
-		if (!(cc = uc_tcc(cd[0]))) break;
-		j = 0;
+	for (;; sm++) {
+		if (sm >= sn) { *psn = s0; *pdn = dm; return -1; }
+		m = decomp(cd, sizeof cd / sizeof cd[0], src[sm]);
+		if (!(cc = uc_tcc(cd[j = 0]))) break;
 
 nonstarter:
 
@@ -73,14 +62,10 @@ nonstarter:
 		   and checked by the generator in uc_dcm.awk. */
 
 		if (cc == 1) {
-			if (size >= dn) { /* FIXME common exit? */
-				*psrc = src; *psn = sn;
-				if (dst) *pdst = dst + dn;
-				*pdn = 0; return U2BIG;
-			}
-			if (dst) dst[size] = cd[j];
-			size++;
-			if (!count) { src++; n--; sn--; }
+			if (dm >= dn) { *psn = s0; return -1; }
+			if (dst) dst[dm] = cd[j];
+			dm++;
+			if (!count) s0++;
 			continue;
 		}
 
@@ -105,8 +90,8 @@ nonstarter:
 
 	for (k = 0; k < count; k++) {
 		size_t tmp = base[order[k]];
-		base[order[k]] = size;
-		if unlikely((size += tmp) < tmp) size = -1;
+		base[order[k]] = dm;
+		if unlikely((dm += tmp) < tmp) dm = -1;
 	}
 
 	if (dst) {
@@ -114,7 +99,7 @@ nonstarter:
 		/* starters and class-1 nonstarters are already written out */
 		base[0] = base[1] = dn;
 
-		for (i = 0; i < n; i++) {
+		for (i = s0; i < sm; i++) {
 			m = decomp(cd, sizeof cd / sizeof cd[0], src[i]);
 			for (j = 0; j < m; j++) {
 				cc = uc_tcc(cd[j]);
@@ -124,59 +109,48 @@ nonstarter:
 		}
 	}
 
-	if (size <= dn) {
-		*psrc = src + n; *psn = sn - n;
-		if (dst) *pdst = dst + size;
-		*pdn = dn - size; return 1;
+	if (dm <= dn) {
+		*psn = sm; *pdn = dm; return 0;
 	} else {
-		*psrc = src; *psn = sn;
-		if (dst) *pdst = dst + dn;
-		*pdn = 0; return U2BIG;
+		*psn = s0; return -1;
 	}
 }
 
 /* FIXME state */
-/* FIXME return consumed not remaining */
-ucerr_t ucsdec(uint_least32_t *uc_restrict dst,
-               size_t *uc_restrict pdn,
-               const uint_least32_t *uc_restrict src,
-               size_t *uc_restrict psn)
+void ucsdec(uint_least32_t *uc_restrict dst,
+            size_t *uc_restrict pdn,
+            const uint_least32_t *uc_restrict src,
+            size_t *uc_restrict psn)
 {
-	size_t sn = psn ? *psn : -1, dn = *pdn;
+	size_t sn = psn ? *psn : -1, dn = pdn ? *pdn : -1;
+	size_t sm = 0, dm = 0;
 
 	for (;;) {
-		int ret; size_t k, n; unsigned char tcc;
+		size_t i, k, n;
+		unsigned tcc = 0;
 
-		for (k = n = tcc = 0;;) {
-			uint_least32_t u, qc; unsigned char lcc;
-
-			if (n >= sn) { ret = UMORE; break; }
-			qc = uc_qc(u = src[n++]);
-			lcc = qc >> UC_LCC_SHIFT & UC_CMBCLS;
-
-			/* FIXME can look at more input than necessary */
-			if ((lcc && tcc > lcc) || (qc & UC_DQN)) {
-				if (!lcc) {
-					if (n > dn) { k = dn; ret = U2BIG; break; }
-					k = n - 1; /* commit before starter */
-				}
-				ret = 1; break; /* slowpath */
-			}
-			if (lcc <= 1) {
-				if (n > dn) { k = dn; ret = U2BIG; break; }
-				k = n; /* commit ccc <= 1 */
-				if (!u) { ret = UDONE; break; }
-			}
-			tcc = qc >> UC_TCC_SHIFT & UC_CMBCLS;
+		n = sn - sm <= dn - dm ? sn : sm + (dn - dm);
+		for (i = k = sm; i < n; i++) {
+			uint_least32_t u = src[i], qc = uc_qc(u);
+			if likely(qc & UC_STARTER) k = i;
+			if ((tcc | UC_DQY) > (qc & (UC_LCC | UC_DQY))) break;
+			tcc = qc >> UC_TCC_SHIFT;
+			if unlikely(!u) { sn = k = i + 1; break; }
 		}
 
-		if (dst) {
-			/* k <= min(sn, sizeof src) <= SIZE_MAX / sizeof *src */
-			memcpy(dst, src, k * sizeof *src); dst += k;
+		if (dst) memcpy(dst + dm, src + sm, (k - sm) * sizeof *src);
+		dm += k - sm; sm = k;
+
+		if (sm < sn && dm < dn) {
+			int r; size_t j = dn - dm; k = sn - sm;
+			r = slowpath(dst + dm, &j, src + sm, &k);
+			dm += j; sm += k;
+			if (r < 0) break;
 		}
-		dn -= k; src += k; sn -= k;
-		if (ret <= 0 || (ret = slowpath(&dst, &dn, &src, &sn)) <= 0) {
-			*pdn = dn; if (psn) *psn = sn; return (ucerr_t)ret;
-		}
+
+		if (sm == sn || dm == dn) break;
 	}
+
+	if (psn) *psn = sm;
+	if (pdn) *pdn = dm;
 }

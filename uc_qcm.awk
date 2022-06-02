@@ -38,15 +38,21 @@ END {
 		if (j in cmbcls) tcc[i] = classes[cmbcls[j]]
 	}
 
-	value[""] = "UC_CMBCLS_(0)"
+	value[""] = "UC_LCC_(UC_CLASSES) | " \
+	            "UC_DQY | UC_CQY | UC_KDQY | UC_KCQY | UC_STARTER"
 	for (i = 0; i <= n; i++) {
-		value_  = "UC_CMBCLS_("(i in cmbcls ? cmbcls[i] : 0)")" \
-		          (i in lcc    ? " | UC_LCC_("lcc[i]")" : "") \
-		          (i in tcc    ? " | UC_TCC_("tcc[i]")" : "") \
-		          (i in nfdqc  ? " | UC_DQ"  nfdqc[i]   : "") \
-		          (i in nfcqc  ? " | UC_CQ"  nfcqc[i]   : "") \
-		          (i in nfkdqc ? " | UC_KDQ" nfkdqc[i]  : "") \
-		          (i in nfkcqc ? " | UC_KCQ" nfkcqc[i]  : "") \
+		nfdqc_  = !(i in nfdqc)  ? "Y" : nfdqc[i]  != "N" ? nfdqc[i]  : ""
+		nfcqc_  = !(i in nfcqc)  ? "Y" : nfcqc[i]  != "N" ? nfcqc[i]  : ""
+		nfkdqc_ = !(i in nfkdqc) ? "Y" : nfkdqc[i] != "N" ? nfkdqc[i] : ""
+		nfkcqc_ = !(i in nfkcqc) ? "Y" : nfkcqc[i] != "N" ? nfkcqc[i] : ""
+		value_  = "UC_LCC_("(i in lcc ? lcc[i] : "UC_CLASSES")")"   \
+		          (i in tcc    ? " | UC_TCC_("tcc[i]")"       : "") \
+		          (i in cmbcls ? " | UC_CMBCLS_("cmbcls[i]")" : "") \
+		          (nfdqc_      ? " | UC_DQ" nfdqc_            : "") \
+		          (nfcqc_      ? " | UC_CQ" nfcqc_            : "") \
+		          (nfkdqc_     ? " | UC_KDQ" nfkdqc_          : "") \
+		          (nfkcqc_     ? " | UC_KCQ" nfkcqc_          : "") \
+		          (!(i in lcc) ? " | UC_STARTER"              : "") \
 		          ""
 		if (value_ != value[""]) value[i] = value_
 	}

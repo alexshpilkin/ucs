@@ -11,25 +11,29 @@ extern "C" {
 
 #include <stddef.h>
 
-#define UC_CLASSES 55 /* < 255 (sic, also used as a neutral lcc value) */
+#define UC_CLASSES 55 /* < 63 (sic, also used as a neutral lcc value) */
 
-#define UC_CMBCLS_SHIFT     0
-#define UC_CMBCLS   ((1 <<  8) - 1)
-#define UC_DQN       (1 <<  8)
-#define UC_KDQN      (1 <<  9)
-#define UC_CQN       (1 << 10)
-#define UC_CQM       (3 << 10)
-#define UC_KCQN      (1 << 12)
-#define UC_KCQM      (3 << 12)
+#define UC_LCC_SHIFT        0
+#define UC_LCC      ((1 <<  6) - 1)
+#define UC_DQY       (1 <<  6)
+#define UC_CQY       (1 <<  7)
+/* FIXME which of these are useful? */
+#define UC_CQM       (1 <<  8)
+#define UC_KDQY      (1 <<  9)
+#define UC_KCQY      (1 << 10)
+#define UC_KCQM      (1 << 11)
+/* unused             3 << 12 */
 /* unused             1 << 14 */
-/* unused             1 << 15 */
-#define UC_LCC_SHIFT       16
+#define UC_STARTER   (1 << 15)
+#define UC_CMBCLS_SHIFT    16
+#define UC_CMBCLS   ((1 <<  8) - 1)
 #define UC_TCC_SHIFT       24
+/* must be zero       3 << 30 */
 
-#define cmbcls(U) ((int)(uc_qc(U) & UC_CMBCLS))
-#define uc_tcc(U) ((int)(uc_qc(U) >> UC_TCC_SHIFT & UC_CMBCLS))
+#define cmbcls(U) ((int)(uc_qc(U) >> UC_CMBCLS_SHIFT & UC_CMBCLS))
+#define uc_tcc(U) ((int)(uc_qc(U) >> UC_TCC_SHIFT))
 
-#define UC_QC_NEUTRAL 0
+#define UC_QC_NEUTRAL (UC_CLASSES | UC_DQY | UC_CQY | UC_KDQY | UC_KCQY | UC_STARTER)
 
 #define UC_QC_SHIFT1 12
 #define UC_QC_MASK1  63
@@ -73,13 +77,8 @@ extern const uint_least32_t uc_rch[3 * UC_RC_SIZE];
 
 uint_least32_t recomp(uint_least32_t fst, uint_least32_t snd); /* FIXME inline? */
 
-/* FIXME status not error */
-typedef enum ucerr { /* FIXME to common header? use -1 for error? */
-	UDONE = 0, U2BIG = -1, UMORE = -2
-} ucerr_t;
-
-ucerr_t ucsdec(uint_least32_t *uc_restrict, size_t *uc_restrict,
-               const uint_least32_t *uc_restrict, size_t *uc_restrict);
+void ucsdec(uint_least32_t *uc_restrict, size_t *uc_restrict,
+            const uint_least32_t *uc_restrict, size_t *uc_restrict);
 
 #ifdef __cplusplus
 }

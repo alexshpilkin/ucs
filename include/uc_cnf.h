@@ -117,12 +117,15 @@ extern "C" {
 #endif
 #endif
 
-#ifndef unlikely
-#if has_attribute(unlikely)
-#define unlikely(E) (!!(E)) [[unlikely]] /* as condition in if, while, etc. */
+#ifndef likely
+#if has_attribute(likely)
+#define likely(E)   (!!(E)) [[__likely__]] /* as condition in if, while, etc. */
+#define unlikely(E) (!!(E)) [[__unlikely__]]
 #elif has_builtin(expect)
+#define likely(E)   (__builtin_expect(!!(E), 1))
 #define unlikely(E) (__builtin_expect(!!(E), 0))
 #else
+#define likely(E)   (!!(E))
 #define unlikely(E) (!!(E))
 #endif
 #endif
