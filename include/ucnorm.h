@@ -1,5 +1,5 @@
-#ifndef UC_UCCOMP_H_
-#define UC_UCCOMP_H_ 1
+#ifndef UC_UCNORM_H_
+#define UC_UCNORM_H_ 1
 
 #ifdef __cplusplus
 extern "C" {
@@ -27,6 +27,7 @@ extern "C" {
 #define UC_TCC_SHIFT       24
 
 #define cmbcls(U) ((int)(uc_qc(U) & UC_CMBCLS))
+#define uc_tcc(U) ((int)(uc_qc(U) >> UC_TCC_SHIFT & UC_CMBCLS))
 
 #define UC_QC_SHIFT1 12
 #define UC_QC_MASK1  63
@@ -69,6 +70,14 @@ size_t decomp(uint_least32_t *uc_restrict s, size_t n, uint_least32_t uc); /* FI
 extern const uint_least32_t uc_rch[3 * UC_RC_SIZE];
 
 uint_least32_t recomp(uint_least32_t fst, uint_least32_t snd); /* FIXME inline? */
+
+/* FIXME status not error */
+typedef enum ucerr { /* FIXME to common header? use -1 for error? */
+	UDONE = 0, U2BIG = -1, UMORE = -2
+} ucerr_t;
+
+ucerr_t ucsdec(uint_least32_t *uc_restrict, size_t *uc_restrict,
+               const uint_least32_t *uc_restrict, size_t *uc_restrict);
 
 #ifdef __cplusplus
 }

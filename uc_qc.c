@@ -1,5 +1,5 @@
 #include "uc_cnf.h"
-#include "uccomp.h"
+#include "ucnorm.h"
 
 /* FIXME duplicate of uc_ty() */
 uc_const uint_least32_t uc_qc(uint_least32_t uc) {

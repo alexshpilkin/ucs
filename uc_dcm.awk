@@ -18,13 +18,19 @@ END {
 	printf "uc_static_assert(DECOMP_MAX >= %d);\n", cdmax
 }
 
-$4 != 0 { set(ccc, $4+0) }
+$4 != 0 { set(ccc, $4+0); if (!cccmin || cccmin > $4+0) cccmin = $4+0 }
 
 END {
+	# Assumptions used by the normalization routines
+	if (ccc[0] || cccmin != 1) exit 1
 	for (i = 0; i <= n; i++) if (i in cd) {
+		for (j = 1; j <= cd[i]; j++) if (ccc[cd[i,j]] == cccmin) {
+			if (j == 1 && cd[i] == 1) continue
+			if (j == 2 && cd[i] == 2 && !ccc[cd[i,1]]) continue
+			exit 1
+		}
 		for (j = 2; j <= cd[i]; j++) {
-			if (ccc[cd[i,j]] && ccc[cd[i,j-1]] > ccc[cd[i,j]])
-				exit 1
+			if (ccc[cd[i,j-1]] > ccc[cd[i,j]]) exit 1
 		}
 	}
 }

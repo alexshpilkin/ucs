@@ -25,14 +25,14 @@ maintainer-clean-boiler: boiler.mk
 	$(MAKE) $(MFLAGS) -f boiler.mk maintainer-clean
 	rm -f boiler.mk
 
-OBJECTS_UC = decomp.o recomp.o uc_dcm.o uc_gcn.o uc_p32.o uc_p64.o uc_qc.o uc_qcm.o uc_rch.o uc_ty.o uc_tym.o
-INCLUDES_UC = include/uc_cnf.h include/uccomp.h include/uctype.h
+OBJECTS_UC = decomp.o recomp.o uc_dcm.o uc_gcn.o uc_p32.o uc_p64.o uc_qc.o uc_qcm.o uc_rch.o uc_ty.o uc_tym.o ucsdec.o
+INCLUDES_UC = include/uc_cnf.h include/ucnorm.h include/uctype.h
 all: libuc.a
 libuc.a: $(OBJECTS_UC)
 	$(AR) $(ARFLAGS) $@ $(OBJECTS_UC)
 	if [ "$(RANLIB)" ]; then $(RANLIB) $@; fi
 $(OBJECTS_UC): include/uc_cnf.h
-decomp.o recomp.o uc_dcm.o uc_rch.o uc_qc.o uc_qcm.o: include/uccomp.h
+decomp.o recomp.o uc_dcm.o uc_qc.o uc_qcm.o uc_rch.o ucsdec.o: include/ucnorm.h
 uc_gcn.o uc_ty.o uc_tym.o: include/uctype.h
 uc_dcm.o: uc_dcm.g
 uc_dcm.g: boiler.mk force ; $(MAKE) $(MFLAGS) -f boiler.mk $@

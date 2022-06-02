@@ -13,9 +13,9 @@ uc_tym.g: ucdssv.awk uc_tym.awk values.awk valrun.awk pctrie.awk \
           ucd/data/extracted/DerivedNumericValues.txt \
           data/HexDigitValues.txt
 
-check/cmbcls: include/uc_cnf.h include/uccomp.h uc_qc.o uc_qcm.o
+check/cmbcls: include/uc_cnf.h include/ucnorm.h uc_qc.o uc_qcm.o
 check/cmbcls.ref: ucdssv.awk check/cmbcls.awk ucd/data/UnicodeData.txt
-check/decomp: include/uc_cnf.h include/uccomp.h decomp.o uc_dcm.o
+check/decomp: include/uc_cnf.h include/ucnorm.h decomp.o uc_dcm.o
 check/decomp.ref: ucdssv.awk check/decomp.awk ucd/data/UnicodeData.txt
 check/isualn.c: infile.awk check/isu.in isu=isualnum
 check/isualn: include/uc_cnf.h include/uctype.h uc_ty.o uc_tym.o
@@ -91,5 +91,7 @@ check/isuxdi: include/uc_cnf.h include/uctype.h uc_ty.o uc_tym.o
 check/isuxdi.ref: ucdssv.awk check/isuxdi.awk ucd/data/PropList.txt ucd/data/UnicodeData.txt
 check/mincat: include/uc_cnf.h include/uctype.h uc_gcn.o uc_ty.o uc_tym.o
 check/mincat.ref: ucdssv.awk check/mincat.awk ucd/data/UnicodeData.txt
-check/recomp: include/uc_cnf.h include/uccomp.h recomp.o uc_dcm.o uc_rch.o
+check/recomp: include/uc_cnf.h include/ucnorm.h recomp.o uc_dcm.o uc_rch.o
 check/recomp.ref: ucdssv.awk check/recomp.awk ucd/data/CompositionExclusions.txt ucd/data/UnicodeData.txt
+check/ucsdec: include/uc_cnf.h include/ucnorm.h include/uctype.h decomp.o uc_dcm.o uc_qc.o uc_qcm.o uc_ty.o uc_tym.o ucsdec.o
+check/ucsdec.ref: ucdssv.awk check/ucsdec.awk ucd/data/NormalizationTest.txt

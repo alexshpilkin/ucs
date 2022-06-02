@@ -6,6 +6,8 @@ $2 == "NFC_QC"  && $3 != "Y"            { set(nfcqc,  $3) }
 $2 == "NFKD_QC" && $3 != "Y"            { set(nfkdqc, $3) }
 $2 == "NFKC_QC" && $3 != "Y"            { set(nfkcqc, $3) }
 
+# FIXME check that cmbcls[dm[i,*]] == 0 implies lcc[i] == 0
+
 $6 ~ /^[^<]/ {
 	k = dm[n] = split($6, a, " ")
 	for (j = 1; j <= k; j++) dm[n,j] = hex(a[j])
@@ -22,7 +24,7 @@ END {
 
 	classes[0] = 1; maxclass = 0
 	for (i = 0; i <= n; i++) if (i in cmbcls) {
-		if(!(cmbcls[i] in classes)) classes[cmbcls[i]] = 1
+		classes[cmbcls[i]] = 1
 		if (maxclass < cmbcls[i]) maxclass = cmbcls[i]
 	}
 	for (i = 0; i <= maxclass; i++) if (i in classes)

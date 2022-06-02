@@ -1,5 +1,5 @@
 #include "uc_cnf.h"
-#include "uccomp.h"
+#include "ucnorm.h"
 
 #include <stddef.h>
 
