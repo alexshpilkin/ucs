@@ -29,6 +29,8 @@ extern "C" {
 #define cmbcls(U) ((int)(uc_qc(U) & UC_CMBCLS))
 #define uc_tcc(U) ((int)(uc_qc(U) >> UC_TCC_SHIFT & UC_CMBCLS))
 
+#define UC_QC_NEUTRAL 0
+
 #define UC_QC_SHIFT1 12
 #define UC_QC_MASK1  63
 #define UC_QC_SHIFT2  6

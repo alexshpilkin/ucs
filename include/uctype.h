@@ -86,6 +86,8 @@ size_t strfromcat(char *uc_restrict, size_t, mincat_t); /* FIXME inline */
 #define UC_XDIGIT     (UINT32_C(1) << 29)
 #define isuxdigit(U)  (UC_INT(uc_ty(U), UC_XDIGIT))
 
+#define UC_TY_NEUTRAL 0
+
 #define UC_TY_SHIFT1 12
 #define UC_TY_MASK1  63
 #define UC_TY_SHIFT2  6

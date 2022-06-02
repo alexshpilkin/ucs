@@ -1,4 +1,7 @@
 END {
+	printf "uc_static_assert(UC_%s_NEUTRAL == (%s));\n",
+	       toupper(NAME), value[""]
+
 	valuev[0] = value[""]
 	for (i = 0; i <= n; i++) if (i in value) {
 		if (!((s = value[i]) in values))

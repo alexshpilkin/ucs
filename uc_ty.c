@@ -6,7 +6,7 @@ uc_const uint_least32_t uc_ty(uint_least32_t uc) {
 	               j = uc >> UC_TY_SHIFT2 & UC_TY_MASK1,
 	               k = uc                 & UC_TY_MASK2;
 	if unlikely(i >= sizeof uc_tyi / sizeof uc_tyi[0]) {
-		return 0;
+		return UC_TY_NEUTRAL;
 	} else {
 		unsigned x = uc_tyi[i], y, z, w;
 		y = uc_tyb[x] + UC_RANK64(uc_tym[x], j);
